@@ -1896,6 +1896,48 @@ const NotificationStorybook = () => {
  );
 };
 
+const LayoutsSection = () => {
+  const [itemCount, setItemCount] = useState(8); const [justifyContent, setJustifyContent] = useState('flex-start'); const [alignItems, setAlignItems] = useState('flex-start'); const [useRandomSizes, setUseRandomSizes] = useState(true); const [gap, setGap] = useState(16);
+  const items = useMemo(() => Array.from({ length: itemCount }, (_, i) => ({ id: i, width: useRandomSizes ? Math.floor(Math.random() * 80) + 60 : 80, height: useRandomSizes ? Math.floor(Math.random() * 100) + 50 : 80, })), [itemCount, useRandomSizes]);
+  return (
+    <div className="space-y-16">
+        <div>
+          <SubHeading>Flexbox</SubHeading>
+          <Description>A one-dimensional layout model for aligning items. Perfect for component-level layouts like aligning buttons in a header.</Description>
+          <DemoCard>
+            <DemoCardBody className="bg-gray-100">
+                 <div className="grid grid-cols-2 md:grid-cols-5 gap-4 items-center mb-6">
+                    <div><label className="font-medium text-sm block mb-1">Items: {itemCount}</label><input type="range" min="2" max="20" value={itemCount} onChange={(e) => setItemCount(Number(e.target.value))} className="w-full"/></div>
+                    <div><label className="font-medium text-sm block mb-1">Gap: {gap}px</label><input type="range" min="0" max="40" step="4" value={gap} onChange={(e) => setGap(Number(e.target.value))} className="w-full"/></div>
+                    <div><label className="font-medium text-sm block mb-1">Justify</label><select value={justifyContent} onChange={(e) => setJustifyContent(e.target.value)} className="w-full p-2 border rounded-md bg-white"><option>flex-start</option><option>flex-end</option><option>center</option><option>space-between</option><option>space-around</option></select></div>
+                    <div><label className="font-medium text-sm block mb-1">Align</label><select value={alignItems} onChange={(e) => setAlignItems(e.target.value)} className="w-full p-2 border rounded-md bg-white"><option>flex-start</option><option>flex-end</option><option>center</option><option>stretch</option><option>baseline</option></select></div>
+                    <div className="flex items-center pt-5"><input type="checkbox" id="random_size" checked={useRandomSizes} onChange={e => setUseRandomSizes(e.target.checked)} /><label htmlFor="random_size" className="ml-2 text-sm font-medium">Random Sizes</label></div>
+                </div>
+            </DemoCardBody>
+            <DemoCardBody className="min-h-[250px] overflow-x-auto">
+                <motion.div className="flex h-full rounded-md" style={{ width: 'max-content', justifyContent, alignItems, gap: `${gap}px`, flexWrap: 'nowrap' }}>{items.map(item => (<motion.div key={item.id} layout transition={{ type: 'spring', stiffness: 300, damping: 30 }} className={`flex items-center justify-center rounded-lg text-white font-bold text-lg shrink-0 bg-[${theme.colors.primary}]`} style={{ width: `${item.width}px`, height: alignItems === 'stretch' ? undefined : `${item.height}px` }}>{item.id + 1}</motion.div>))}</motion.div>
+            </DemoCardBody>
+          </DemoCard>
+        </div>
+        <div>
+            <SubHeading>CSS Grid</SubHeading>
+            <Description>A two-dimensional layout model for page-level structure. It excels at creating complex, responsive grids with rows and columns.</Description>
+            <DemoCard>
+                 <DemoCardBody className="p-4">
+                     <div className="grid grid-cols-12 gap-4 min-h-[300px]">
+                        <div className="col-span-12 md:col-span-3 bg-gray-200 rounded-lg p-4 flex items-center justify-center">Sidebar</div>
+                        <div className="col-span-12 md:col-span-9 bg-gray-200 rounded-lg p-4 flex items-center justify-center">Main Content</div>
+                        <div className="col-span-12 md:col-span-6 bg-gray-200 rounded-lg p-4 flex items-center justify-center">Half Width</div>
+                        <div className="col-span-12 md:col-span-6 bg-gray-200 rounded-lg p-4 flex items-center justify-center">Half Width</div>
+                     </div>
+                 </DemoCardBody>
+            </DemoCard>
+        </div>
+    </div>
+  );
+};
+
+
 // Enhanced Advanced React Section with working demos
 const AdvancedReactSection = () => (
  <div className="space-y-16">
