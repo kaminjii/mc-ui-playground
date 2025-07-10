@@ -93,11 +93,13 @@ function App() {
     document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const appStyles = {
+ const appStyles = {
     backgroundColor: theme.colors.background.primary,
     fontFamily: theme.typography.fontFamily.primary,
     color: theme.colors.text.primary,
-    minHeight: '100vh'
+    minHeight: '100vh',
+    position: 'relative',
+    overflow: 'hidden'
   };
 
   const sectionStyles = (index, dark) => ({

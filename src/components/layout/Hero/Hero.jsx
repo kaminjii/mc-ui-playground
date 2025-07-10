@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowDown, Code, Play } from 'lucide-react';
+import { ArrowDown, Code, Play, ChevronDown } from 'lucide-react';
 import Button from '../../ui/Button/Button';
 import { theme } from '../../../theme';
 
@@ -16,39 +16,46 @@ const Hero = () => {
     alignItems: 'center',
     justifyContent: 'center',
     textAlign: 'center',
-    padding: theme.spacing.lg,
+    padding: `${theme.spacing['2xl']} ${theme.spacing.lg}`,
     position: 'relative',
     overflow: 'hidden',
-    background: `linear-gradient(135deg, ${theme.colors.background.primary} 0%, ${theme.colors.background.secondary} 100%)`
+    backgroundColor: theme.colors.background.primary, // Pure white
+    paddingTop: '120px' // Account for nav bar
   };
 
   const contentStyles = {
     position: 'relative',
     zIndex: 10,
-    maxWidth: '1200px',
+    maxWidth: '1000px',
     margin: '0 auto',
     opacity: isVisible ? 1 : 0,
     transform: isVisible ? 'translateY(0)' : 'translateY(40px)',
-    transition: 'all 1s ease-out'
+    transition: 'all 1.2s cubic-bezier(0.23, 1, 0.32, 1)'
   };
 
   const titleStyles = {
-    fontSize: 'clamp(2.5rem, 8vw, 6rem)',
-    fontWeight: theme.typography.fontWeight.black,
-    lineHeight: theme.typography.lineHeight.tight,
+    fontSize: 'clamp(3rem, 8vw, 5rem)',
+    fontWeight: theme.typography.fontWeight.bold, // Softer weight
+    lineHeight: 1.2,
     marginBottom: theme.spacing.xl,
-    background: `linear-gradient(135deg, ${theme.colors.text.primary}, ${theme.colors.text.secondary})`,
+    color: theme.colors.text.primary,
+    letterSpacing: '-0.01em' // Less tight
+  };
+
+  const highlightStyles = {
+    background: `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.secondary})`,
     WebkitBackgroundClip: 'text',
     WebkitTextFillColor: 'transparent',
-    backgroundClip: 'text'
+    backgroundClip: 'text',
+    display: 'inline-block'
   };
 
   const subtitleStyles = {
-    fontSize: 'clamp(1.125rem, 3vw, 1.5rem)',
+    fontSize: 'clamp(1rem, 3vw, 1.25rem)',
     color: theme.colors.text.secondary,
     marginBottom: theme.spacing['3xl'],
-    lineHeight: theme.typography.lineHeight.relaxed,
-    maxWidth: '800px',
+    lineHeight: 1.6,
+    maxWidth: '700px',
     margin: `0 auto ${theme.spacing['3xl']}`
   };
 
@@ -63,125 +70,184 @@ const Hero = () => {
     }
   };
 
-  // Floating animation elements
-  const floatingElements = [
-    { 
-      size: '80px', 
-      top: '20%', 
-      left: '10%', 
-      delay: '0s',
-      color: theme.colors.accent.orange 
+  const scrollIndicatorStyles = {
+    position: 'absolute',
+    bottom: theme.spacing['2xl'],
+    left: '50%',
+    transform: 'translateX(-50%)',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: theme.spacing.sm,
+    color: theme.colors.text.muted,
+    fontSize: theme.typography.fontSize.sm,
+    animation: 'bounce 2s infinite'
+  };
+
+  // Large minimal circles - outline style like Mastercard Design Center
+  const circleElements = [
+    // Large outline circle (main focal point)
+    {
+      size: '500px',
+      top: '15%',
+      right: '10%',
+      borderWidth: '2px',
+      opacity: 0.08,
+      zIndex: 1
     },
-    { 
-      size: '60px', 
-      top: '60%', 
-      right: '15%', 
-      delay: '2s',
-      color: theme.colors.accent.yellow 
+    // Medium outline circle
+    {
+      size: '300px',
+      bottom: '20%',
+      left: '15%',
+      borderWidth: '1px',
+      opacity: 0.06,
+      zIndex: 1
     },
-    { 
-      size: '40px', 
-      top: '30%', 
-      right: '25%', 
-      delay: '4s',
-      color: theme.colors.primary 
+    // Small accent circle
+    {
+      size: '150px',
+      top: '40%',
+      left: '20%',
+      borderWidth: '1px',
+      opacity: 0.04,
+      zIndex: 1
     }
   ];
 
-  return (
-    <section style={heroStyles}>
-      {/* Floating background elements */}
-      {floatingElements.map((element, index) => (
-        <div
-          key={index}
-          style={{
-            position: 'absolute',
-            width: element.size,
-            height: element.size,
-            background: `linear-gradient(135deg, ${element.color}20, ${element.color}10)`,
-            borderRadius: '50%',
-            top: element.top,
-            left: element.left,
-            right: element.right,
-            animation: `float 6s ease-in-out infinite`,
-            animationDelay: element.delay,
-            zIndex: 1
-          }}
-        />
-      ))}
+  // Remove the small floating circles - keep it minimal
 
-      <div style={contentStyles}>
-        {/* Logo animation */}
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          marginBottom: theme.spacing['2xl']
-        }}>
+  return (
+    <>
+      <style jsx>{`
+        @keyframes floatGentle {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-12px); }
+        }
+        
+        @keyframes bounce {
+          0%, 100% { transform: translateX(-50%) translateY(0px); }
+          50% { transform: translateX(-50%) translateY(-10px); }
+        }
+        
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+      `}</style>
+      
+      <section style={heroStyles}>
+        {/* Large minimal outline circles */}
+        {circleElements.map((circle, index) => (
+          <div
+            key={`circle-${index}`}
+            style={{
+              position: 'absolute',
+              width: circle.size,
+              height: circle.size,
+              borderRadius: '50%',
+              border: `${circle.borderWidth} solid ${theme.colors.text.tertiary}`,
+              top: circle.top,
+              bottom: circle.bottom,
+              left: circle.left,
+              right: circle.right,
+              opacity: circle.opacity,
+              zIndex: circle.zIndex,
+              animation: 'fadeIn 3s ease-out',
+              animationDelay: `${index * 0.5}s`
+            }}
+          />
+        ))}
+
+        <div style={contentStyles}>
+          {/* Mastercard-style brand mark */}
           <div style={{
-            position: 'relative',
             display: 'flex',
             alignItems: 'center',
-            gap: theme.spacing.md
+            justifyContent: 'center',
+            marginBottom: theme.spacing['2xl'],
+            gap: '-8px'
           }}>
+            {/* Red circle */}
             <div style={{
-              width: '80px',
-              height: '80px',
-              background: `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.secondary})`,
+              width: '50px',
+              height: '50px',
+              background: '#EB001B',
               borderRadius: '50%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              boxShadow: theme.shadows.lg
-            }}>
-              <div style={{
-                width: '40px',
-                height: '40px',
-                background: `linear-gradient(135deg, ${theme.colors.secondary}, ${theme.colors.tertiary})`,
-                borderRadius: '50%'
-              }} />
-            </div>
+              zIndex: 2
+            }} />
+            {/* Orange circle overlapping */}
+            <div style={{
+              width: '50px',
+              height: '50px',
+              background: theme.colors.primary,
+              borderRadius: '50%',
+              marginLeft: '-20px',
+              zIndex: 1
+            }} />
+          </div>
+
+          <h1 style={titleStyles}>
+            Modern{' '}
+            <span style={highlightStyles}>
+              UI Engineering
+            </span>
+          </h1>
+
+          <p style={subtitleStyles}>
+            An interactive exploration of advanced frontend development principles, 
+            from React fundamentals to cutting-edge design systems that power world-class applications.
+          </p>
+
+          <div style={buttonGroupStyles}>
+            <Button 
+              size="lg"
+              onClick={() => document.getElementById('react-evolution')?.scrollIntoView({ behavior: 'smooth' })}
+              style={{
+                background: `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.secondary})`,
+                border: 'none',
+                borderRadius: theme.borderRadius.full, // Very rounded
+                boxShadow: `0 12px 40px ${theme.colors.primary}15`,
+                transition: 'all 0.4s cubic-bezier(0.23, 1, 0.32, 1)',
+                padding: `${theme.spacing['2xl']} ${theme.spacing['3xl']}`,
+                fontSize: theme.typography.fontSize.lg,
+                fontWeight: theme.typography.fontWeight.medium // Softer weight
+              }}
+            >
+              <Play size={20} />
+              <span>Start Exploring</span>
+            </Button>
+            
+            <Button 
+              variant="secondary"
+              size="lg"
+              onClick={() => document.getElementById('project-architecture')?.scrollIntoView({ behavior: 'smooth' })}
+              style={{
+                backgroundColor: theme.colors.background.glass,
+                border: `1px solid rgba(255,255,255,0.3)`,
+                borderRadius: theme.borderRadius.full, // Very rounded
+                backdropFilter: 'blur(30px)',
+                transition: 'all 0.4s cubic-bezier(0.23, 1, 0.32, 1)',
+                color: theme.colors.text.primary,
+                padding: `${theme.spacing['2xl']} ${theme.spacing['3xl']}`,
+                fontSize: theme.typography.fontSize.lg,
+                fontWeight: theme.typography.fontWeight.medium, // Softer weight
+                boxShadow: '0 12px 40px rgba(0,0,0,0.06)'
+              }}
+            >
+              <Code size={20} />
+              <span>View Architecture</span>
+            </Button>
           </div>
         </div>
 
-        <h1 style={titleStyles}>
-          Modern UI Engineering
-        </h1>
-
-        <p style={subtitleStyles}>
-          An interactive exploration of advanced frontend development principles, 
-          from React fundamentals to cutting-edge design systems that power world-class applications.
-        </p>
-
-        <div style={buttonGroupStyles}>
-          <Button 
-            size="lg"
-            onClick={() => document.getElementById('react-evolution')?.scrollIntoView({ behavior: 'smooth' })}
-          >
-            <Play size={20} />
-            <span>Start Exploring</span>
-          </Button>
-          
-          <Button 
-            variant="secondary"
-            size="lg"
-            onClick={() => document.getElementById('project-architecture')?.scrollIntoView({ behavior: 'smooth' })}
-          >
-            <Code size={20} />
-            <span>View Architecture</span>
-          </Button>
+        {/* Scroll indicator */}
+        <div style={scrollIndicatorStyles}>
+          <span>Scroll to explore</span>
+          <ChevronDown size={20} />
         </div>
-      </div>
-
-      {/* CSS animations */}
-      <style jsx>{`
-        @keyframes float {
-          0%, 100% { transform: translateY(0px) rotate(0deg); }
-          33% { transform: translateY(-20px) rotate(5deg); }
-          66% { transform: translateY(-10px) rotate(-5deg); }
-        }
-      `}</style>
-    </section>
+      </section>
+    </>
   );
 };
 

@@ -1,19 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import Button from '../../ui/Button/Button';
 import { theme } from '../../../theme';
 
 const Header = ({ sections, currentSection, onSectionClick }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 100);
+    };
+    
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const headerStyles = {
-    position: 'sticky',
+    position: 'fixed',
     top: 0,
+    left: 0,
+    right: 0,
     zIndex: 1000,
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    backgroundColor: isScrolled ? 'rgba(255, 255, 255, 0.95)' : 'rgba(255, 255, 255, 0.8)',
     backdropFilter: 'blur(20px)',
-    borderBottom: `1px solid ${theme.colors.border.light}`,
-    transition: 'all 0.3s ease'
+    borderBottom: isScrolled ? `1px solid ${theme.colors.border.light}` : 'none',
+    transition: 'all 0.3s cubic-bezier(0.23, 1, 0.32, 1)',
+    transform: isScrolled ? 'translateY(0)' : 'translateY(0)'
   };
 
   const containerStyles = {
@@ -30,36 +43,50 @@ const Header = ({ sections, currentSection, onSectionClick }) => {
     display: 'flex',
     alignItems: 'center',
     gap: theme.spacing.md,
-    fontSize: theme.typography.fontSize.xl,
+    fontSize: theme.typography.fontSize.lg,
     fontWeight: theme.typography.fontWeight.bold,
-    color: theme.colors.text.primary
+    color: theme.colors.text.primary,
+    textDecoration: 'none',
+    transition: 'all 0.3s ease'
+  };
+
+  const logoMarkStyles = {
+    width: '32px',
+    height: '32px',
+    background: `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.secondary})`,
+    borderRadius: '50%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'relative'
   };
 
   const navStyles = {
-    display: 'flex',
+    display: 'none',
     alignItems: 'center',
-    gap: theme.spacing.sm,
-    overflowX: 'auto',
-    scrollbarWidth: 'none',
-    msOverflowStyle: 'none'
+    gap: theme.spacing.xs,
+    '@media (min-width: 768px)': {
+      display: 'flex'
+    }
   };
 
   const navItemStyles = (isActive) => ({
     display: 'flex',
     alignItems: 'center',
     gap: theme.spacing.sm,
-    padding: `${theme.spacing.sm} ${theme.spacing.lg}`,
-    borderRadius: theme.borderRadius.lg,
+    padding: `${theme.spacing.sm} ${theme.spacing.md}`,
+    borderRadius: theme.borderRadius.xl,
     fontSize: theme.typography.fontSize.sm,
     fontWeight: theme.typography.fontWeight.medium,
     whiteSpace: 'nowrap',
     cursor: 'pointer',
-    transition: 'all 0.2s ease',
-    backgroundColor: isActive ? theme.colors.primary : 'transparent',
-    color: isActive ? theme.colors.text.inverse : theme.colors.text.secondary,
-    transform: isActive ? 'scale(1.05)' : 'scale(1)',
-    boxShadow: isActive ? theme.shadows.md : 'none',
-    border: 'none'
+    transition: 'all 0.3s cubic-bezier(0.23, 1, 0.32, 1)',
+    backgroundColor: isActive ? `${theme.colors.primary}10` : 'transparent',
+    color: isActive ? theme.colors.primary : theme.colors.text.secondary,
+    border: 'none',
+    textDecoration: 'none',
+    position: 'relative',
+    overflow: 'hidden'
   });
 
   const mobileNavStyles = {
@@ -68,44 +95,56 @@ const Header = ({ sections, currentSection, onSectionClick }) => {
     top: '100%',
     left: 0,
     right: 0,
-    backgroundColor: theme.colors.background.primary,
+    backgroundColor: 'rgba(255, 255, 255, 0.98)',
+    backdropFilter: 'blur(20px)',
     borderBottom: `1px solid ${theme.colors.border.light}`,
     padding: theme.spacing.lg,
-    boxShadow: theme.shadows.lg,
-    '@media (min-width: 768px)': {
-      display: 'none'
-    }
-  };
-
-  const desktopNavStyles = {
-    ...navStyles,
-    display: 'none',
-    '@media (min-width: 768px)': {
-      display: 'flex'
-    }
+    boxShadow: `0 10px 40px ${theme.colors.background.overlay}`,
+    borderRadius: `0 0 ${theme.borderRadius['2xl']} ${theme.borderRadius['2xl']}`
   };
 
   return (
     <header style={headerStyles}>
       <div style={containerStyles}>
         {/* Logo */}
-        <div style={logoStyles}>
-          <div style={{
-            width: '32px',
-            height: '32px',
-            background: `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.secondary})`,
-            borderRadius: theme.borderRadius.md
-          }} />
+        <a 
+          href="#" 
+          style={logoStyles}
+          onClick={(e) => {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+        >
+          <div style={logoMarkStyles}>
+            <div style={{
+              width: '12px',
+              height: '12px',
+              background: theme.colors.background.primary,
+              borderRadius: '50%'
+            }} />
+          </div>
           <span>Frontend Engineering</span>
-        </div>
+        </a>
 
         {/* Desktop Navigation */}
-        <nav style={desktopNavStyles}>
+        <nav style={navStyles}>
           {Object.entries(sections).map(([key, { title, icon }]) => (
             <button
               key={key}
               onClick={() => onSectionClick(key)}
               style={navItemStyles(currentSection === key)}
+              onMouseEnter={(e) => {
+                if (currentSection !== key) {
+                  e.target.style.backgroundColor = `${theme.colors.primary}05`;
+                  e.target.style.transform = 'translateY(-1px)';
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (currentSection !== key) {
+                  e.target.style.backgroundColor = 'transparent';
+                  e.target.style.transform = 'translateY(0)';
+                }
+              }}
             >
               {React.cloneElement(icon, { size: 16 })}
               <span>{title}</span>
@@ -114,15 +153,19 @@ const Header = ({ sections, currentSection, onSectionClick }) => {
         </nav>
 
         {/* Mobile Menu Button */}
-        <div style={{ display: 'block', '@media (min-width: 768px)': { display: 'none' } }}>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          >
-            {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
-          </Button>
-        </div>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          style={{
+            display: 'flex',
+            '@media (min-width: 768px)': { display: 'none' },
+            padding: theme.spacing.sm,
+            backgroundColor: mobileMenuOpen ? `${theme.colors.primary}10` : 'transparent'
+          }}
+        >
+          {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+        </Button>
       </div>
 
       {/* Mobile Navigation */}
@@ -139,9 +182,14 @@ const Header = ({ sections, currentSection, onSectionClick }) => {
                 onSectionClick(key);
                 setMobileMenuOpen(false);
               }}
-              style={navItemStyles(currentSection === key)}
+              style={{
+                ...navItemStyles(currentSection === key),
+                justifyContent: 'flex-start',
+                width: '100%',
+                padding: theme.spacing.lg
+              }}
             >
-              {React.cloneElement(icon, { size: 16 })}
+              {React.cloneElement(icon, { size: 18 })}
               <span>{title}</span>
             </button>
           ))}
