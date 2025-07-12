@@ -1,271 +1,166 @@
+// src/components/sections/ClassVsFunctional/ClassVsFunctional.jsx
 import React from "react";
-import {
-  CheckCircle,
-  XCircle,
-  ArrowDown,
-  Code,
-  Zap,
-  Users,
-} from "lucide-react";
+import { motion } from "framer-motion";
 import { theme } from "../../../theme";
-import CodeBlock from "../../ui/CodeBlock/CodeBlock";
+import Card from "../../ui/Card/Card";
+import SyntaxHighlighter from "react-syntax-highlighter";
+import { atomOneDark } from "react-syntax-highlighter/dist/esm/styles/hljs";
 
 const ClassVsFunctional = () => {
-  const classComponentCode = `interface State {
-  count: number;
-}
+  const sectionStyles = {
+    padding: `${theme.spacing["3xl"]} 0`,
+    backgroundColor: theme.colors.background.secondary,
+  };
+  const containerStyles = {
+    maxWidth: "1200px",
+    margin: "0 auto",
+    padding: `0 ${theme.spacing.xl}`,
+  };
+  const headerStyles = {
+    textAlign: "center",
+    marginBottom: theme.spacing["3xl"],
+  };
+  const titleStyles = {
+    fontSize: theme.typography.fontSize["4xl"],
+    fontWeight: theme.typography.fontWeight.bold,
+    marginBottom: theme.spacing.md,
+  };
+  const subtitleStyles = {
+    fontSize: theme.typography.fontSize.lg,
+    color: theme.colors.text.secondary,
+    maxWidth: "800px",
+    margin: "0 auto",
+    lineHeight: 1.6,
+  };
+  const comparisonGridStyles = {
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr",
+    gap: theme.spacing.xl,
+    alignItems: "start",
+  };
 
-class Button extends Component<{}, State> {
-  constructor(props: {}) {
+  const codeCardStyles = {
+    padding: 0,
+    overflow: "hidden",
+  };
+
+  const codeHeaderStyles = {
+    padding: `${theme.spacing.md} ${theme.spacing.lg}`,
+    borderBottom: `1px solid ${theme.colors.border.medium}`,
+    backgroundColor: theme.colors.background.primary,
+  };
+
+  const classComponentCode = `import React, { Component } from 'react';
+
+class Welcome extends Component {
+  constructor(props) {
     super(props);
-    this.state = { count: 0 };
+    this.state = {
+      message: 'Hello'
+    };
+  }
+
+  componentDidMount() {
+    console.log('Component mounted');
   }
 
   render() {
     return (
-      <button onClick={() => this.setState({ count: this.state.count + 1 })}>
-        Clicked {this.state.count} times
-      </button>
+      <h1>{this.state.message}, {this.props.name}</h1>
     );
   }
 }`;
 
-  const functionalComponentCode = `const Button: React.FC = () => {
-  const [count, setCount] = useState<number>(0);
+  const functionalComponentCode = `import React, { useState, useEffect } from 'react';
+
+const Welcome = ({ name }) => {
+  const [message, setMessage] = useState('Hello');
+
+  useEffect(() => {
+    console.log('Component rendered/updated');
+  }, []);
 
   return (
-    <button onClick={() => setCount(count + 1)}>
-      Clicked {count} times
-    </button>
+    <h1>{message}, {name}</h1>
   );
-}`;
+};`;
 
-  const sectionStyles = {
-    padding: `${theme.spacing["4xl"]} 0`,
-    maxWidth: "1000px",
-    margin: "0 auto",
-    paddingLeft: theme.spacing.xl,
-    paddingRight: theme.spacing.xl,
+  const syntaxHighlighterStyle = {
+    ...atomOneDark,
+    hljs: {
+      ...atomOneDark.hljs,
+      background: "transparent",
+      padding: theme.spacing.lg,
+      fontSize: theme.typography.fontSize.sm,
+      lineHeight: "1.7",
+    },
   };
-
-  const headerStyles = {
-    textAlign: "center",
-    marginBottom: theme.spacing["4xl"],
-  };
-
-  const titleStyles = {
-    fontSize: theme.typography.fontSize["4xl"],
-    fontWeight: theme.typography.fontWeight.bold,
-    marginBottom: theme.spacing.lg,
-    color: theme.colors.text.primary,
-  };
-
-  const subtitleStyles = {
-    fontSize: theme.typography.fontSize.lg,
-    color: theme.colors.text.secondary,
-    maxWidth: "600px",
-    margin: "0 auto",
-    lineHeight: 1.6,
-  };
-
-  const comparisonSectionStyles = {
-    marginBottom: theme.spacing["4xl"],
-  };
-
-  const codeBlockContainerStyles = {
-    marginBottom: theme.spacing.xl,
-  };
-
-  const labelStyles = (type) => ({
-    display: "inline-flex",
-    alignItems: "center",
-    gap: theme.spacing.sm,
-    padding: `${theme.spacing.sm} ${theme.spacing.md}`,
-    backgroundColor:
-      type === "old"
-        ? theme.colors.background.secondary
-        : theme.colors.background.secondary,
-    border: `1px solid ${theme.colors.border.medium}`,
-    borderRadius: theme.borderRadius.md,
-    fontSize: theme.typography.fontSize.sm,
-    fontWeight: "600",
-    color: theme.colors.text.primary,
-    marginBottom: theme.spacing.md,
-    width: "fit-content",
-  });
-
-  const arrowContainerStyles = {
-    display: "flex",
-    justifyContent: "center",
-    margin: `${theme.spacing.lg} 0`,
-  };
-
-  const arrowStyles = {
-    padding: theme.spacing.md,
-    backgroundColor: theme.colors.background.secondary,
-    borderRadius: "50%",
-    border: `1px solid ${theme.colors.border.medium}`,
-  };
-
-  const benefitsStyles = {
-    display: "grid",
-    gridTemplateColumns: "1fr 1fr",
-    gap: theme.spacing["2xl"],
-    marginTop: theme.spacing["2xl"],
-  };
-
-  const benefitColumnStyles = {
-    padding: theme.spacing.xl,
-    backgroundColor: theme.colors.background.secondary,
-    borderRadius: theme.borderRadius.lg,
-    border: `1px solid ${theme.colors.border.medium}`,
-  };
-
-  const benefitTitleStyles = {
-    display: "flex",
-    alignItems: "center",
-    gap: theme.spacing.md,
-    fontSize: theme.typography.fontSize.lg,
-    fontWeight: theme.typography.fontWeight.bold,
-    color: theme.colors.text.primary,
-    marginBottom: theme.spacing.lg,
-  };
-
-  const benefitListStyles = {
-    listStyle: "none",
-    padding: 0,
-    margin: 0,
-  };
-
-  const benefitItemStyles = {
-    display: "flex",
-    alignItems: "center",
-    gap: theme.spacing.sm,
-    marginBottom: theme.spacing.md,
-    fontSize: theme.typography.fontSize.sm,
-    color: theme.colors.text.secondary,
-  };
-
-  const quickFactsStyles = {
-    display: "grid",
-    gridTemplateColumns: "repeat(3, 1fr)",
-    gap: theme.spacing.xl,
-    marginTop: theme.spacing["3xl"],
-    padding: theme.spacing.xl,
-    backgroundColor: theme.colors.background.secondary,
-    borderRadius: theme.borderRadius.lg,
-    border: `1px solid ${theme.colors.border.medium}`,
-  };
-
-  const factStyles = {
-    textAlign: "center",
-  };
-
-  const factNumberStyles = {
-    fontSize: theme.typography.fontSize["2xl"],
-    fontWeight: theme.typography.fontWeight.bold,
-    color: theme.colors.primary,
-    marginBottom: theme.spacing.sm,
-  };
-
-  const factLabelStyles = {
-    fontSize: theme.typography.fontSize.sm,
-    color: theme.colors.text.secondary,
-  };
-
-  const classCons = [
-    "More boilerplate code",
-    "Binding methods to `this`",
-    "Complex lifecycle methods",
-    "Harder to reuse logic",
-  ];
-
-  const functionalPros = [
-    "Less code to write",
-    "No `this` binding issues",
-    "Hooks for everything",
-    "Easy to test and share logic",
-  ];
 
   return (
     <section style={sectionStyles}>
-      <header style={headerStyles}>
-        <h2 style={titleStyles}>Class vs. Functional Components</h2>
-        <p style={subtitleStyles}>
-          React evolved from verbose class components to clean functional
-          components with hooks. Here's the same button component, before and
-          after.
-        </p>
-      </header>
+      <div style={containerStyles}>
+        <header style={headerStyles}>
+          <h2 style={titleStyles}>Class vs. Functional Components</h2>
+          <p style={subtitleStyles}>
+            React has evolved from primarily using class-based components to
+            favoring functional components with Hooks. Functional components are
+            generally more concise, easier to read and test, and offer better
+            performance.
+          </p>
+        </header>
 
-      <div style={comparisonSectionStyles}>
-        <div style={codeBlockContainerStyles}>
-          <div style={labelStyles("old")}>
-            <XCircle size={16} />
-            The Old Way: Class Component
-          </div>
-          <CodeBlock language="typescript">{classComponentCode}</CodeBlock>
-        </div>
+        <div style={comparisonGridStyles}>
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+          >
+            <Card style={codeCardStyles}>
+              <div style={codeHeaderStyles}>
+                <h3
+                  style={{
+                    fontSize: theme.typography.fontSize.lg,
+                    fontWeight: theme.typography.fontWeight.bold,
+                  }}
+                >
+                  Class Component (Legacy)
+                </h3>
+              </div>
+              <SyntaxHighlighter
+                language="javascript"
+                style={syntaxHighlighterStyle}
+              >
+                {classComponentCode}
+              </SyntaxHighlighter>
+            </Card>
+          </motion.div>
 
-        <div style={arrowContainerStyles}>
-          <div style={arrowStyles}>
-            <ArrowDown size={20} color={theme.colors.primary} />
-          </div>
-        </div>
-
-        <div style={codeBlockContainerStyles}>
-          <div style={labelStyles("new")}>
-            <CheckCircle size={16} />
-            The Modern Way: Functional Component
-          </div>
-          <CodeBlock language="typescript">{functionalComponentCode}</CodeBlock>
-        </div>
-      </div>
-
-      <div style={benefitsStyles}>
-        <div style={benefitColumnStyles}>
-          <h3 style={benefitTitleStyles}>
-            <XCircle size={20} color={theme.colors.text.secondary} />
-            Class Component Issues
-          </h3>
-          <ul style={benefitListStyles}>
-            {classCons.map((con, index) => (
-              <li key={index} style={benefitItemStyles}>
-                <XCircle size={14} color={theme.colors.text.tertiary} />
-                {con}
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div style={benefitColumnStyles}>
-          <h3 style={benefitTitleStyles}>
-            <CheckCircle size={20} color={theme.colors.primary} />
-            Functional Component Benefits
-          </h3>
-          <ul style={benefitListStyles}>
-            {functionalPros.map((pro, index) => (
-              <li key={index} style={benefitItemStyles}>
-                <CheckCircle size={14} color={theme.colors.primary} />
-                {pro}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-
-      <div style={quickFactsStyles}>
-        <div style={factStyles}>
-          <div style={factNumberStyles}>60%</div>
-          <div style={factLabelStyles}>Less Code</div>
-        </div>
-        <div style={factStyles}>
-          <div style={factNumberStyles}>0</div>
-          <div style={factLabelStyles}>Binding Issues</div>
-        </div>
-        <div style={factStyles}>
-          <div style={factNumberStyles}>∞</div>
-          <div style={factLabelStyles}>Reusability</div>
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
+          >
+            <Card style={codeCardStyles}>
+              <div style={codeHeaderStyles}>
+                <h3
+                  style={{
+                    fontSize: theme.typography.fontSize.lg,
+                    fontWeight: theme.typography.fontWeight.bold,
+                  }}
+                >
+                  Functional Component (Modern)
+                </h3>
+              </div>
+              <SyntaxHighlighter
+                language="javascript"
+                style={syntaxHighlighterStyle}
+              >
+                {functionalComponentCode}
+              </SyntaxHighlighter>
+            </Card>
+          </motion.div>
         </div>
       </div>
     </section>

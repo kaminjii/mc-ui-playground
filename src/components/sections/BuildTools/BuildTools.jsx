@@ -1,26 +1,30 @@
-// src/components/sections/BuildTools/BuildTools.jsx
 import React from "react";
-import { Zap, Server, Package, TestTube, Bug, Wrench } from "lucide-react";
+import { motion } from "framer-motion";
+import { Zap, Code, ShieldCheck, Paintbrush, ArrowRight } from "lucide-react";
 import { theme } from "../../../theme";
-import CodeBlock from "../../ui/CodeBlock/CodeBlock";
+
+const tools = [
+  {
+    icon: <Paintbrush size={28} color={theme.colors.primary} />,
+    title: "Prettier & ESLint",
+    description: "Format code and enforce quality rules as you write.",
+  },
+  {
+    icon: <Code size={28} color={theme.colors.primary} />,
+    title: "Babel",
+    description: "Transpiles modern JS into browser-compatible versions.",
+  },
+  {
+    icon: <Zap size={28} color={theme.colors.primary} />,
+    title: "Vite",
+    description: "Bundles code and serves it with a fast dev server.",
+  },
+];
 
 const BuildTools = () => {
-  const vitestMockCode = `// setupTests.js or at the top of your test file
-
-import { vi } from 'vitest';
-
-// Tell Vitest to replace the module with an empty object
-vi.mock('@connect/typography', () => ({
-  // You can mock specific exports if needed,
-  // but an empty object is often enough.
-  default: {},
-}));
-`;
-
-  // --- Styles ---
   const sectionStyles = {
     padding: `${theme.spacing["3xl"]} 0`,
-    position: "relative",
+    backgroundColor: theme.colors.background.primary,
   };
   const containerStyles = {
     maxWidth: "1200px",
@@ -39,188 +43,95 @@ vi.mock('@connect/typography', () => ({
   const subtitleStyles = {
     fontSize: theme.typography.fontSize.lg,
     color: theme.colors.text.secondary,
-    maxWidth: "800px",
+    maxWidth: "750px",
     margin: "0 auto",
     lineHeight: 1.6,
   };
-  const cardStyles = {
-    backgroundColor: theme.colors.background.primary,
+  const workflowContainerStyles = {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: theme.spacing.md,
+    flexWrap: "wrap",
+  };
+  const toolNodeStyles = {
+    border: `1px solid ${theme.colors.border.light}`,
     borderRadius: theme.borderRadius.xl,
     padding: theme.spacing.xl,
-    border: `1px solid ${theme.colors.border.light}`,
-    display: "flex",
-    flexDirection: "column",
-    height: "100%",
-  };
-  const conceptTitleStyles = {
-    display: "flex",
-    alignItems: "center",
-    gap: theme.spacing.md,
-    fontSize: theme.typography.fontSize["2xl"],
-    fontWeight: theme.typography.fontWeight.bold,
-    marginBottom: theme.spacing.lg,
-  };
-  const toolCardStyles = {
-    ...cardStyles,
-    alignItems: "center",
     textAlign: "center",
+    flex: "1",
+    minWidth: "220px",
+    maxWidth: "280px",
+    backgroundColor: theme.colors.background.primary,
+    boxShadow: theme.shadows.md,
   };
-  const descriptionStyles = {
-    fontSize: theme.typography.fontSize.base,
-    color: theme.colors.text.secondary,
-    lineHeight: 1.6,
-    flexGrow: 1,
+  const arrowStyles = {
+    color: theme.colors.text.tertiary,
+    flexShrink: 0,
   };
 
   return (
     <section style={sectionStyles}>
       <div style={containerStyles}>
         <header style={headerStyles}>
-          <h2 style={titleStyles}>The React Tooling Landscape</h2>
+          <h2 style={titleStyles}>Modern Frontend Workflow</h2>
           <p style={subtitleStyles}>
-            A summary of modern build tools and frameworks, why the ecosystem
-            has evolved, and how to solve common testing challenges.
+            Your code goes on a journey from your editor to the user's browser,
+            powered by a toolchain that ensures quality and compatibility.
           </p>
         </header>
-
-        {/* Tooling Comparison */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-            gap: theme.spacing.xl,
-            alignItems: "stretch",
-          }}
-        >
-          <div style={toolCardStyles}>
-            <Package
-              size={40}
-              color={theme.colors.text.tertiary}
-              style={{ marginBottom: theme.spacing.md }}
-            />
-            <h3 style={{ ...conceptTitleStyles, justifyContent: "center" }}>
-              Create React App (CRA)
-            </h3>
-            <p style={descriptionStyles}>
-              The original zero-config tool for React. It was sunsetted because
-              its underlying bundler (Webpack) became slow for modern
-              development, and it lacked the flexibility needed for many
-              projects.
-            </p>
-          </div>
-          <div style={toolCardStyles}>
-            <Zap
-              size={40}
-              color={theme.colors.primary}
-              style={{ marginBottom: theme.spacing.md }}
-            />
-            <h3 style={{ ...conceptTitleStyles, justifyContent: "center" }}>
-              Vite
-            </h3>
-            <p style={descriptionStyles}>
-              The modern successor to CRA for client-side apps. It uses native
-              ES modules for a lightning-fast development server and Rollup for
-              highly optimized production builds. It is now the official
-              recommendation from the React team.
-            </p>
-          </div>
-          <div style={toolCardStyles}>
-            <Server
-              size={40}
-              color={theme.colors.text.secondary}
-              style={{ marginBottom: theme.spacing.md }}
-            />
-            <h3 style={{ ...conceptTitleStyles, justifyContent: "center" }}>
-              Next.js
-            </h3>
-            <p style={descriptionStyles}>
-              A full-stack React framework for production. It provides
-              server-side rendering (SSR), static site generation (SSG),
-              file-based routing, and API routes out of the box. Use it when you
-              need more than just a client-side app.
-            </p>
-          </div>
-        </div>
-
-        {/* Testing Section */}
-        <div style={{ ...cardStyles, marginTop: theme.spacing.xl }}>
-          <h3 style={conceptTitleStyles}>
-            <TestTube size={24} /> Testing Static Assets: Vitest vs. Jest
-          </h3>
-          <p style={descriptionStyles}>
-            We encountered an issue where Vitest failed when a component
-            imported the `@connect/typography` package, because that package, in
-            turn, imports a `.woff2` font file. Here's why this happens and how
-            to solve it.
-          </p>
-
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gap: theme.spacing.xl,
-              marginTop: theme.spacing.lg,
-            }}
-          >
-            <div>
-              <h4
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: theme.spacing.sm,
-                  fontWeight: "bold",
-                }}
+        <div style={workflowContainerStyles}>
+          {tools.map((tool, index) => (
+            <React.Fragment key={tool.title}>
+              <motion.div
+                style={toolNodeStyles}
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.2 }}
               >
-                <Bug size={20} color={theme.colors.error} /> The Problem with
-                Vitest
-              </h4>
-              <p style={{ ...descriptionStyles, marginTop: theme.spacing.sm }}>
-                Vitest runs in a Node.js environment, which doesn't understand
-                how to process non-JavaScript assets like font files (`.woff2`),
-                CSS, or images by default. When it sees `import './font.woff2'`,
-                it throws an error because it's not a valid JavaScript module.
-              </p>
-            </div>
-            <div>
-              <h4
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: theme.spacing.sm,
-                  fontWeight: "bold",
-                }}
-              >
-                <Wrench size={20} color={theme.colors.success} /> How CRA (Jest)
-                Handled It
-              </h4>
-              <p style={{ ...descriptionStyles, marginTop: theme.spacing.sm }}>
-                Create React App's Jest configuration came pre-configured with
-                "transforms." These transforms would intercept imports for
-                static assets and replace them with a mock value (like a
-                filename string), preventing the test runner from crashing.
-              </p>
-            </div>
-          </div>
-
-          <div style={{ marginTop: theme.spacing.xl }}>
-            <h4
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: theme.spacing.sm,
-                fontWeight: "bold",
-              }}
-            >
-              The Solution: Mocking the Module
-            </h4>
-            <p style={{ ...descriptionStyles, marginTop: theme.spacing.sm }}>
-              Since we only need to prevent the test from crashing on the
-              import, we can tell Vitest to replace the entire
-              `@connect/typography` module with a "mock" (a fake version). This
-              satisfies the import and allows our component tests to run.
-            </p>
-            <CodeBlock theme="light">{vitestMockCode}</CodeBlock>
-          </div>
+                <div
+                  style={{
+                    display: "inline-flex",
+                    padding: theme.spacing.lg,
+                    backgroundColor: theme.colors.background.secondary,
+                    borderRadius: theme.borderRadius.full,
+                    marginBottom: theme.spacing.lg,
+                  }}
+                >
+                  {tool.icon}
+                </div>
+                <h3
+                  style={{
+                    fontSize: theme.typography.fontSize.xl,
+                    fontWeight: theme.typography.fontWeight.bold,
+                    marginBottom: theme.spacing.sm,
+                  }}
+                >
+                  {tool.title}
+                </h3>
+                <p
+                  style={{
+                    color: theme.colors.text.secondary,
+                    lineHeight: 1.6,
+                  }}
+                >
+                  {tool.description}
+                </p>
+              </motion.div>
+              {index < tools.length - 1 && (
+                <motion.div
+                  style={arrowStyles}
+                  initial={{ opacity: 0, scale: 0.5 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.2 + 0.1 }}
+                >
+                  <ArrowRight size={32} />
+                </motion.div>
+              )}
+            </React.Fragment>
+          ))}
         </div>
       </div>
     </section>
