@@ -1,73 +1,47 @@
+// src/components/layout/Footer/Footer.jsx
 import React from 'react';
 import { theme } from '../../../theme';
 
 const Footer = () => {
   const footerStyles = {
-    textAlign: 'center',
-    padding: `${theme.spacing['3xl']} ${theme.spacing.lg}`,
     backgroundColor: theme.colors.background.secondary,
-    borderTop: `1px solid ${theme.colors.border.light}`,
-    color: theme.colors.text.secondary
+    padding: `${theme.spacing.xl}`,
+    position: 'relative',
+    zIndex: 10,
+    borderTop: `1px solid ${theme.colors.border.light}`
   };
 
   const containerStyles = {
-    maxWidth: '800px',
-    margin: '0 auto'
-  };
-
-  const titleStyles = {
-    fontSize: theme.typography.fontSize.lg,
-    marginBottom: theme.spacing.lg,
-    color: theme.colors.text.primary
-  };
-
-  const descriptionStyles = {
-    fontSize: theme.typography.fontSize.sm,
-    marginBottom: theme.spacing.xl
-  };
-
-  const mastercardLogoStyles = {
+    maxWidth: '1200px',
+    margin: '0 auto',
     display: 'flex',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    gap: theme.spacing.md,
-    marginTop: theme.spacing.xl
   };
 
-  const logoTextStyles = {
-    marginLeft: theme.spacing.sm,
-    fontWeight: theme.typography.fontWeight.semibold,
-    color: theme.colors.text.primary
+  const logoStyles = {
+    display: 'flex',
+    alignItems: 'center',
+    gap: theme.spacing.sm,
+  };
+
+  const copyrightStyles = {
+    fontSize: theme.typography.fontSize.sm,
+    color: theme.colors.text.tertiary,
   };
 
   return (
     <footer style={footerStyles}>
       <div style={containerStyles}>
-        <p style={titleStyles}>
-          This comprehensive presentation showcases the depth and breadth of modern frontend engineering.
-        </p>
-        <p style={descriptionStyles}>
-          Designed and built with ❤️ by a passionate Software Engineer at Mastercard, 
-          demonstrating excellence in UI/UX development.
-        </p>
-        <div style={mastercardLogoStyles}>
-          <div style={{
-            width: '32px',
-            height: '32px',
-            background: theme.colors.primary,
-            borderRadius: '50%'
-          }} />
-          <div style={{
-            width: '32px',
-            height: '32px',
-            background: theme.colors.secondary,
-            borderRadius: '50%',
-            marginLeft: '-16px',
-            opacity: 0.9
-          }} />
-          <span style={logoTextStyles}>
-            Mastercard
-          </span>
+        <div style={logoStyles}>
+          {/* Mastercard-inspired logo mark */}
+          <div style={{ display: 'flex' }}>
+            <div style={{ width: '24px', height: '24px', background: theme.colors.secondary, borderRadius: '50%' }} />
+            <div style={{ width: '24px', height: '24px', background: theme.colors.accent.yellow, borderRadius: '50%', marginLeft: '-12px', opacity: 0.9 }} />
+          </div>
+        </div>
+        <div style={copyrightStyles}>
+          © {new Date().getFullYear()} Mastercard. All rights reserved.
         </div>
       </div>
     </footer>

@@ -1,3 +1,4 @@
+// src/components/ui/Button/Button.jsx
 import React from 'react';
 import { Loader2 } from 'lucide-react';
 import { theme } from '../../../theme';
@@ -19,60 +20,36 @@ const Button = ({
     justifyContent: 'center',
     gap: theme.spacing.sm,
     fontFamily: theme.typography.fontFamily.primary,
-    fontWeight: theme.typography.fontWeight.medium, // Softer weight
-    borderRadius: theme.borderRadius.full, // Very rounded/pill shaped
-    transition: 'all 0.3s cubic-bezier(0.23, 1, 0.32, 1)',
+    fontWeight: theme.typography.fontWeight.medium,
+    borderRadius: theme.borderRadius.full,
+    transition: 'all 0.25s ease-out',
     cursor: disabled || loading ? 'not-allowed' : 'pointer',
-    border: 'none',
+    border: '1px solid transparent',
     outline: 'none',
-    textDecoration: 'none',
-    position: 'relative',
-    overflow: 'hidden'
   };
 
   const variants = {
     primary: {
-      background: `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.secondary})`,
+      backgroundColor: theme.colors.primary,
       color: theme.colors.text.inverse,
-      boxShadow: `0 8px 32px ${theme.colors.primary}15`,
-      border: 'none'
+      borderColor: theme.colors.primary,
     },
     secondary: {
-      backgroundColor: theme.colors.background.glass,
+      backgroundColor: theme.colors.background.primary,
       color: theme.colors.text.primary,
-      border: `1px solid rgba(255,255,255,0.3)`,
-      backdropFilter: 'blur(30px)',
-      boxShadow: '0 8px 32px rgba(0,0,0,0.04)'
+      borderColor: theme.colors.border.medium,
     },
     ghost: {
       backgroundColor: 'transparent',
-      color: theme.colors.text.primary,
-      border: `1px solid ${theme.colors.border.light}`,
-      backdropFilter: 'blur(20px)'
-    },
-    danger: {
-      background: `linear-gradient(135deg, ${theme.colors.primary}, #ff4757)`,
-      color: theme.colors.text.inverse,
-      boxShadow: `0 8px 32px ${theme.colors.primary}15`
+      color: theme.colors.text.secondary,
+      borderColor: 'transparent',
     }
   };
 
   const sizes = {
-    sm: {
-      padding: `${theme.spacing.sm} ${theme.spacing.lg}`,
-      fontSize: theme.typography.fontSize.sm,
-      height: '36px'
-    },
-    md: {
-      padding: `${theme.spacing.md} ${theme.spacing.xl}`,
-      fontSize: theme.typography.fontSize.base,
-      height: '44px'
-    },
-    lg: {
-      padding: `${theme.spacing.lg} ${theme.spacing['2xl']}`,
-      fontSize: theme.typography.fontSize.lg,
-      height: '52px'
-    }
+    sm: { padding: `0 ${theme.spacing.lg}`, fontSize: theme.typography.fontSize.sm, height: '36px' },
+    md: { padding: `0 ${theme.spacing.xl}`, fontSize: theme.typography.fontSize.base, height: '44px' },
+    lg: { padding: `0 ${theme.spacing['2xl']}`, fontSize: theme.typography.fontSize.lg, height: '52px' }
   };
 
   const buttonStyles = {
@@ -80,55 +57,50 @@ const Button = ({
     ...variants[variant],
     ...sizes[size],
     ...style,
-    opacity: disabled || loading ? 0.6 : 1
+    opacity: disabled || loading ? 0.7 : 1
   };
 
-  const handleMouseEnter = (e) => {
-    if (!disabled && !loading) {
-      e.currentTarget.style.transform = 'translateY(-2px)';
-      if (variant === 'primary') {
-        e.currentTarget.style.boxShadow = `0 12px 40px ${theme.colors.primary}25`;
-      } else if (variant === 'secondary') {
-        e.currentTarget.style.backgroundColor = theme.colors.background.primary;
-        e.currentTarget.style.boxShadow = '0 8px 32px rgba(0,0,0,0.08)';
-      } else if (variant === 'ghost') {
-        e.currentTarget.style.backgroundColor = theme.colors.background.secondary;
-        e.currentTarget.style.borderColor = theme.colors.border.medium;
-      }
+  // Define hover styles separately to keep the base object clean
+  const getHoverStyles = () => {
+    switch(variant) {
+      case 'primary':
+        return { transform: 'translateY(-2px)', boxShadow: theme.shadows.lg, filter: 'brightness(1.05)' };
+      case 'secondary':
+        return { borderColor: theme.colors.primary, color: theme.colors.primary, boxShadow: theme.shadows.md };
+      case 'ghost':
+        return { backgroundColor: theme.colors.background.secondary, color: theme.colors.text.primary };
+      default:
+        return {};
     }
   };
-
-  const handleMouseLeave = (e) => {
-    if (!disabled && !loading) {
-      e.currentTarget.style.transform = 'translateY(0)';
-      if (variant === 'primary') {
-        e.currentTarget.style.boxShadow = `0 6px 24px ${theme.colors.primary}20`;
-      } else if (variant === 'secondary') {
-        e.currentTarget.style.backgroundColor = theme.colors.background.card;
-        e.currentTarget.style.boxShadow = '0 4px 20px rgba(0,0,0,0.04)';
-      } else if (variant === 'ghost') {
-        e.currentTarget.style.backgroundColor = 'transparent';
-        e.currentTarget.style.borderColor = theme.colors.border.light;
-      }
-    }
-  };
-
+  
   return (
     <button 
       style={buttonStyles}
       onClick={onClick}
       disabled={disabled || loading}
       className={className}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      onMouseEnter={(e) => {
+        if (!disabled && !loading) {
+          Object.assign(e.currentTarget.style, getHoverStyles());
+        }
+      }}
+      onMouseLeave={(e) => {
+        if (!disabled && !loading) {
+          // Reset styles to original state
+          Object.assign(e.currentTarget.style, {
+            transform: 'translateY(0)',
+            boxShadow: 'none',
+            filter: 'none',
+            backgroundColor: variants[variant].backgroundColor,
+            color: variants[variant].color,
+            borderColor: variants[variant].borderColor || 'transparent',
+          });
+        }
+      }}
       {...props}
     >
-      {loading && (
-        <Loader2 
-          size={size === 'sm' ? 14 : size === 'lg' ? 20 : 16} 
-          style={{ animation: 'spin 1s linear infinite' }} 
-        />
-      )}
+      {loading && <Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} />}
       {children}
     </button>
   );

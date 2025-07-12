@@ -1,253 +1,103 @@
-import React, { useState, useEffect } from 'react';
-import { ArrowDown, Code, Play, ChevronDown } from 'lucide-react';
-import Button from '../../ui/Button/Button';
-import { theme } from '../../../theme';
+// src/components/layout/Hero/Hero.jsx
+import React, { useState, useEffect } from "react";
+import { theme } from "../../../theme";
 
 const Hero = () => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    setIsVisible(true);
+    const timer = setTimeout(() => setIsVisible(true), 100);
+    return () => clearTimeout(timer);
   }, []);
 
   const heroStyles = {
-    minHeight: '100vh',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    textAlign: 'center',
-    padding: `${theme.spacing['2xl']} ${theme.spacing.lg}`,
-    position: 'relative',
-    overflow: 'hidden',
-    backgroundColor: theme.colors.background.primary, // Pure white
-    paddingTop: '120px' // Account for nav bar
+    minHeight: "100vh",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "flex-start", // Align content to the left
+    textAlign: "left", // Align text to the left
+    padding: `0 ${theme.spacing["3xl"]}`, // Adjust padding
+    position: "relative",
+    overflow: "hidden",
+    backgroundColor: "#1C1C1E", // Darker background
+    color: theme.colors.text.inverse,
   };
 
   const contentStyles = {
-    position: 'relative',
-    zIndex: 10,
-    maxWidth: '1000px',
-    margin: '0 auto',
+    position: "relative",
+    zIndex: 2,
+    maxWidth: "800px",
     opacity: isVisible ? 1 : 0,
-    transform: isVisible ? 'translateY(0)' : 'translateY(40px)',
-    transition: 'all 1.2s cubic-bezier(0.23, 1, 0.32, 1)'
+    transform: isVisible ? "translateY(0)" : "translateY(20px)",
+    transition: "opacity 1s ease, transform 1s cubic-bezier(0.23, 1, 0.32, 1)",
+  };
+
+  const brandCenterStyles = {
+    fontFamily: theme.typography.fontFamily.primary,
+    fontSize: theme.typography.fontSize.sm,
+    fontWeight: theme.typography.fontWeight.medium,
+    color: theme.colors.text.tertiary,
+    letterSpacing: "0.1em",
+    textTransform: "uppercase",
+    marginBottom: theme.spacing.lg,
   };
 
   const titleStyles = {
-    fontSize: 'clamp(3rem, 8vw, 5rem)',
-    fontWeight: theme.typography.fontWeight.bold, // Softer weight
-    lineHeight: 1.2,
+    fontFamily: theme.typography.fontFamily.primary,
+    fontSize: "clamp(3rem, 7vw, 5.5rem)", // Responsive font size
+    fontWeight: theme.typography.fontWeight.light, // Lighter font weight
+    lineHeight: 1.1,
     marginBottom: theme.spacing.xl,
-    color: theme.colors.text.primary,
-    letterSpacing: '-0.01em' // Less tight
+    letterSpacing: "-0.02em",
   };
 
-  const highlightStyles = {
-    background: `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.secondary})`,
-    WebkitBackgroundClip: 'text',
-    WebkitTextFillColor: 'transparent',
-    backgroundClip: 'text',
-    display: 'inline-block'
-  };
-
-  const subtitleStyles = {
-    fontSize: 'clamp(1rem, 3vw, 1.25rem)',
-    color: theme.colors.text.secondary,
-    marginBottom: theme.spacing['3xl'],
-    lineHeight: 1.6,
-    maxWidth: '700px',
-    margin: `0 auto ${theme.spacing['3xl']}`
-  };
-
-  const buttonGroupStyles = {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: theme.spacing.lg,
-    alignItems: 'center',
-    '@media (min-width: 640px)': {
-      flexDirection: 'row',
-      justifyContent: 'center'
-    }
-  };
-
-  const scrollIndicatorStyles = {
-    position: 'absolute',
-    bottom: theme.spacing['2xl'],
-    left: '50%',
-    transform: 'translateX(-50%)',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    gap: theme.spacing.sm,
-    color: theme.colors.text.muted,
-    fontSize: theme.typography.fontSize.sm,
-    animation: 'bounce 2s infinite'
-  };
-
-  // Large minimal circles - outline style like Mastercard Design Center
-  const circleElements = [
-    // Large outline circle (main focal point)
+  // Updated circle configuration for better visibility
+  const backgroundCircles = [
     {
-      size: '500px',
-      top: '15%',
-      right: '10%',
-      borderWidth: '2px',
-      opacity: 0.08,
-      zIndex: 1
+      size: "clamp(500px, 60vw, 900px)",
+      top: "50%",
+      left: "70%",
+      color: "rgba(255, 255, 255, 0.02)",
     },
-    // Medium outline circle
     {
-      size: '300px',
-      bottom: '20%',
-      left: '15%',
-      borderWidth: '1px',
-      opacity: 0.06,
-      zIndex: 1
+      size: "clamp(400px, 50vw, 700px)",
+      top: "20%",
+      left: "30%",
+      color: "rgba(255, 255, 255, 0.03)",
     },
-    // Small accent circle
-    {
-      size: '150px',
-      top: '40%',
-      left: '20%',
-      borderWidth: '1px',
-      opacity: 0.04,
-      zIndex: 1
-    }
   ];
 
-  // Remove the small floating circles - keep it minimal
-
   return (
-    <>
-      <style jsx>{`
-        @keyframes floatGentle {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-12px); }
-        }
-        
-        @keyframes bounce {
-          0%, 100% { transform: translateX(-50%) translateY(0px); }
-          50% { transform: translateX(-50%) translateY(-10px); }
-        }
-        
-        @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
-      `}</style>
-      
-      <section style={heroStyles}>
-        {/* Large minimal outline circles */}
-        {circleElements.map((circle, index) => (
-          <div
-            key={`circle-${index}`}
-            style={{
-              position: 'absolute',
-              width: circle.size,
-              height: circle.size,
-              borderRadius: '50%',
-              border: `${circle.borderWidth} solid ${theme.colors.text.tertiary}`,
-              top: circle.top,
-              bottom: circle.bottom,
-              left: circle.left,
-              right: circle.right,
-              opacity: circle.opacity,
-              zIndex: circle.zIndex,
-              animation: 'fadeIn 3s ease-out',
-              animationDelay: `${index * 0.5}s`
-            }}
-          />
-        ))}
+    <section style={heroStyles}>
+      {backgroundCircles.map((circle, index) => (
+        <div
+          key={index}
+          style={{
+            position: "absolute",
+            width: circle.size,
+            height: circle.size,
+            borderRadius: "50%",
+            backgroundColor: circle.color, // Use a semi-transparent background color
+            top: circle.top,
+            left: circle.left,
+            transform: "translate(-50%, -50%)",
+            zIndex: 1,
+          }}
+        />
+      ))}
 
-        <div style={contentStyles}>
-          {/* Mastercard-style brand mark */}
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginBottom: theme.spacing['2xl'],
-            gap: '-8px'
-          }}>
-            {/* Red circle */}
-            <div style={{
-              width: '50px',
-              height: '50px',
-              background: '#EB001B',
-              borderRadius: '50%',
-              zIndex: 2
-            }} />
-            {/* Orange circle overlapping */}
-            <div style={{
-              width: '50px',
-              height: '50px',
-              background: theme.colors.primary,
-              borderRadius: '50%',
-              marginLeft: '-20px',
-              zIndex: 1
-            }} />
-          </div>
+      <div style={contentStyles}>
+        <p style={brandCenterStyles}>Brand Center</p>
 
-          <h1 style={titleStyles}>
-            Modern{' '}
-            <span style={highlightStyles}>
-              UI Engineering
-            </span>
-          </h1>
-
-          <p style={subtitleStyles}>
-            An interactive exploration of advanced frontend development principles, 
-            from React fundamentals to cutting-edge design systems that power world-class applications.
-          </p>
-
-          <div style={buttonGroupStyles}>
-            <Button 
-              size="lg"
-              onClick={() => document.getElementById('react-evolution')?.scrollIntoView({ behavior: 'smooth' })}
-              style={{
-                background: `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.secondary})`,
-                border: 'none',
-                borderRadius: theme.borderRadius.full, // Very rounded
-                boxShadow: `0 12px 40px ${theme.colors.primary}15`,
-                transition: 'all 0.4s cubic-bezier(0.23, 1, 0.32, 1)',
-                padding: `${theme.spacing['2xl']} ${theme.spacing['3xl']}`,
-                fontSize: theme.typography.fontSize.lg,
-                fontWeight: theme.typography.fontWeight.medium // Softer weight
-              }}
-            >
-              <Play size={20} />
-              <span>Start Exploring</span>
-            </Button>
-            
-            <Button 
-              variant="secondary"
-              size="lg"
-              onClick={() => document.getElementById('project-architecture')?.scrollIntoView({ behavior: 'smooth' })}
-              style={{
-                backgroundColor: theme.colors.background.glass,
-                border: `1px solid rgba(255,255,255,0.3)`,
-                borderRadius: theme.borderRadius.full, // Very rounded
-                backdropFilter: 'blur(30px)',
-                transition: 'all 0.4s cubic-bezier(0.23, 1, 0.32, 1)',
-                color: theme.colors.text.primary,
-                padding: `${theme.spacing['2xl']} ${theme.spacing['3xl']}`,
-                fontSize: theme.typography.fontSize.lg,
-                fontWeight: theme.typography.fontWeight.medium, // Softer weight
-                boxShadow: '0 12px 40px rgba(0,0,0,0.06)'
-              }}
-            >
-              <Code size={20} />
-              <span>View Architecture</span>
-            </Button>
-          </div>
-        </div>
-
-        {/* Scroll indicator */}
-        <div style={scrollIndicatorStyles}>
-          <span>Scroll to explore</span>
-          <ChevronDown size={20} />
-        </div>
-      </section>
-    </>
+        <h1 style={titleStyles}>
+          Kaitlin
+          <br />
+          UI
+          <br />
+          Presentation
+        </h1>
+      </div>
+    </section>
   );
 };
 
