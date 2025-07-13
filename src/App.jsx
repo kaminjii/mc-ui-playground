@@ -37,49 +37,54 @@ function App() {
     backgroundColor: theme.colors.background.primary,
   };
 
+  const mainContentStyles = {
+    display: "grid",
+    gridTemplateColumns: `minmax(${theme.grid.margins}, 1fr) repeat(${
+      theme.grid.columns
+    }, minmax(0, calc((${theme.grid.container} - (${
+      theme.grid.margins
+    } * 2) - (${theme.grid.gutters} * ${theme.grid.columns - 1})) / ${
+      theme.grid.columns
+    }))) minmax(${theme.grid.margins}, 1fr)`,
+    gridColumnGap: theme.grid.gutters,
+  };
+
   return (
     <div style={{ position: "relative" }}>
       <div style={appContainerStyles}>
         <Header />
-        <main>
-          <Hero />
-
-          {/* Part 1: The "Why" - Evolution of Modern Frontend */}
-          <AnimatedSection>
+        <Hero />
+        <main style={mainContentStyles}>
+          {/* All sections are now children of main and will flow correctly */}
+          <AnimatedSection fullWidth>
             <ReactEvolution />
           </AnimatedSection>
-          <AnimatedSection>
+          <AnimatedSection fullWidth>
             <PackageManagerComparison />
             <BuildTools />
           </AnimatedSection>
-          <AnimatedSection>
+          <AnimatedSection fullWidth>
             <ClassVsFunctional />
           </AnimatedSection>
-
-          {/* Part 2: The "What" - Our Design System */}
-          <AnimatedSection>
+          <AnimatedSection fullWidth>
             <DesignSystems />
           </AnimatedSection>
-          <AnimatedSection>
+          <AnimatedSection fullWidth>
             <TokenExplorer />
           </AnimatedSection>
-          <AnimatedSection>
+          <AnimatedSection fullWidth>
             <ImageVsSvg />
           </AnimatedSection>
-
-          {/* Part 3: The "How" - Interactive Demos */}
-          <AnimatedSection>
+          <AnimatedSection fullWidth>
             <SpacingPlayground />
           </AnimatedSection>
-          <AnimatedSection>
+          <AnimatedSection fullWidth>
             <FlexboxPlayground />
           </AnimatedSection>
-
-          {/* Part 4: Advanced Concepts */}
-          <AnimatedSection>
+          <AnimatedSection fullWidth>
             <PropDrilling />
           </AnimatedSection>
-          <AnimatedSection>
+          <AnimatedSection fullWidth>
             <AdvancedReact />
           </AnimatedSection>
         </main>

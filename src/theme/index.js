@@ -1,5 +1,11 @@
 // src/theme/index.js
 export const theme = {
+  grid: {
+    container: "1440px",
+    margins: "120px",
+    gutters: "20px",
+    columns: 12,
+  },
   colors: {
     primary: "#E85002", // Vibrant branding orange
     secondary: "#EB001B", // Mastercard Red for accents

@@ -50,14 +50,15 @@ const Header = () => {
     backgroundColor: isScrolled ? "rgba(255, 255, 255, 0.7)" : "transparent",
     backdropFilter: isScrolled ? "blur(10px)" : "none",
     boxShadow: isScrolled ? `0 2px 10px rgba(0,0,0,0.05)` : "none",
+    gridColumn: "1 / -1",
   };
 
   // New container style to constrain the content and prevent overflow
   const containerStyles = {
     width: "100%",
-    maxWidth: "1200px", // This should match your main content's max-width
+    maxWidth: theme.grid.container, // This should match your main content's max-width
     margin: "0 auto",
-    padding: `0 ${theme.spacing.xl}`, // Horizontal padding is now on the container
+    padding: `0 ${theme.grid.margins}`, // Horizontal padding is now on the container
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",

@@ -7,25 +7,28 @@ import Button from "../../ui/Button/Button";
 import { motion } from "framer-motion";
 
 const DesignSystems = () => {
+  // This outer section is rendered in a full-width container from App.jsx.
+  // We only apply vertical padding, allowing the background to fill the full width.
   const sectionStyles = {
-    padding: `${theme.spacing["3xl"]} 0`,
+    padding: `${theme.spacing["3xl"]}`,
     backgroundColor: theme.colors.background.dark,
     color: theme.colors.text.inverse,
     position: "relative",
-    overflow: "hidden",
   };
 
-  const containerStyles = {
-    maxWidth: "1200px",
-    margin: "0 auto",
-    padding: `0 ${theme.spacing.xl}`,
-    position: "relative",
+  // This new container wraps all the content. It's centered with 'margin: 0 auto'
+  // and its width is constrained to align with the main 12-column grid.
+  const contentContainerStyles = {
+    maxWidth: `calc(${theme.grid.container} - (${theme.grid.margins} * 2))`,
+    margin: "auto",
     zIndex: 2,
+    display: "flex",
+    flexDirection: "column",
+    gap: theme.spacing["3xl"],
   };
 
   const headerStyles = {
     textAlign: "center",
-    marginBottom: theme.spacing["3xl"],
   };
 
   const titleStyles = {
@@ -47,14 +50,13 @@ const DesignSystems = () => {
     display: "grid",
     gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
     gap: theme.spacing.xl,
-    marginBottom: theme.spacing["3xl"],
   };
 
   const codeSnippetStyle = {
     fontFamily: theme.typography.fontFamily.mono,
     backgroundColor: "rgba(0,0,0,0.3)",
     padding: `${theme.spacing.xs} ${theme.spacing.sm}`,
-    borderRadius: theme.borderRadius.sm,
+    borderRadius: theme.borderRadius.md,
     fontSize: theme.typography.fontSize.sm,
     color: theme.colors.text.inverse,
   };
@@ -92,7 +94,7 @@ const DesignSystems = () => {
     },
   ];
 
-  const BackgroundShape = ({ size, top, left, color }) => (
+  const BackgroundShape = ({ size, top, left, right, color }) => (
     <motion.div
       style={{
         position: "absolute",
@@ -102,6 +104,7 @@ const DesignSystems = () => {
         background: `radial-gradient(circle, ${color}1A 0%, transparent 70%)`,
         top,
         left,
+        right,
         zIndex: 1,
       }}
       initial={{ opacity: 0, scale: 0.5 }}
@@ -126,7 +129,7 @@ const DesignSystems = () => {
         color={theme.colors.secondary}
       />
 
-      <div style={containerStyles}>
+      <div style={contentContainerStyles}>
         <header style={headerStyles}>
           <h2 style={titleStyles}>MADE: The Mastercard Design Ecosystem</h2>
           <p style={subtitleStyles}>
@@ -138,12 +141,7 @@ const DesignSystems = () => {
 
         <div style={gridStyles}>
           {principles.map((item) => (
-            <Card
-              key={item.title}
-              variant="glass"
-              interactive
-              style={{ height: "100%" }}
-            >
+            <Card key={item.title} variant="glass" interactive>
               <div style={{ marginBottom: theme.spacing.lg }}>{item.icon}</div>
               <h3
                 style={{
@@ -159,7 +157,7 @@ const DesignSystems = () => {
                 style={{
                   color: theme.colors.text.tertiary,
                   lineHeight: 1.6,
-                  fontSize: theme.typography.fontSize.md,
+                  fontSize: theme.typography.fontSize.base,
                 }}
               >
                 {item.description}

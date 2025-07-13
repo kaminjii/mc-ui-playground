@@ -13,7 +13,7 @@ const Card = ({
 }) => {
   const baseStyles = {
     borderRadius: theme.borderRadius.xl,
-    padding: theme.spacing["xl"],
+    padding: theme.spacing.xl,
     transition: "box-shadow 0.3s ease, border-color 0.3s ease",
   };
 

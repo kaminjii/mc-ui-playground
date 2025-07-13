@@ -10,7 +10,7 @@ const Hero = () => {
     alignItems: "center",
     justifyContent: "flex-start",
     textAlign: "left",
-    padding: `0 ${theme.spacing["3xl"]}`,
+    padding: `0 ${theme.grid.margins}`,
     position: "relative",
     overflow: "hidden",
     backgroundColor: theme.colors.background.dark,
