@@ -3,10 +3,11 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { theme } from "../../../theme";
 import Card from "../../ui/Card/Card";
-import ReactLogoSvg from "./react-logo.svg?react";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { atomOneDark } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import { MousePointerClick, Code, Accessibility } from "lucide-react";
+import MastercardLogoSvg from "./mastercard-logo.svg?react";
+import mastercardLogoPng from "../../../assets/mastercard-logo.png";
 
 const ImageVsSvg = () => {
   const [zoom, setZoom] = useState(1);
@@ -127,11 +128,13 @@ const ImageVsSvg = () => {
             >
               PNG (Raster)
             </h3>
-            <Card style={{ padding: theme.spacing.md }}>
+            <Card
+              style={{ padding: theme.spacing.md, margin: theme.spacing.md }}
+            >
               <div style={imageContainerStyles}>
                 <img
-                  src="/react-logo.png"
-                  alt="React Logo PNG"
+                  src={mastercardLogoPng}
+                  alt="Mastercard Logo PNG"
                   style={imageStyles}
                 />
               </div>
@@ -153,9 +156,11 @@ const ImageVsSvg = () => {
             >
               SVG (Vector)
             </h3>
-            <Card style={{ padding: theme.spacing.md }}>
+            <Card
+              style={{ padding: theme.spacing.md, margin: theme.spacing.md }}
+            >
               <div style={imageContainerStyles}>
-                <ReactLogoSvg style={svgStyles} />
+                <MastercardLogoSvg style={svgStyles} />
               </div>
             </Card>
           </motion.div>

@@ -1,5 +1,6 @@
 // src/App.jsx
 import React from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import Header from "./components/layout/Header/Header";
 import Hero from "./components/layout/Hero/Hero";
@@ -16,7 +17,7 @@ import ClassVsFunctional from "./components/sections/ClassVsFunctional/ClassVsFu
 import BuildTools from "./components/sections/BuildTools/BuildTools";
 import DesignSystems from "./components/sections/DesignSystems/DesignSystems";
 import PackageManagerComparison from "./components/sections/PackageManagerComparison/PackageManagerComparison";
-
+import LoginScreen from "./components/sections/LoginScreen/LoginScreen";
 // Wrapper to add a consistent "fade-in-up" animation
 const AnimatedSection = ({ children, fullWidth = false }) => (
   <motion.div
@@ -48,6 +49,18 @@ function App() {
     }))) minmax(${theme.grid.margins}, 1fr)`,
     gridColumnGap: theme.grid.gutters,
   };
+
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  // This function will be called from LoginScreen on success
+  const handleLoginSuccess = () => {
+    setIsAuthenticated(true);
+  };
+
+  // If the user is not authenticated, show the login screen
+  if (!isAuthenticated) {
+    return <LoginScreen onLoginSuccess={handleLoginSuccess} />;
+  }
 
   return (
     <div style={{ position: "relative" }}>

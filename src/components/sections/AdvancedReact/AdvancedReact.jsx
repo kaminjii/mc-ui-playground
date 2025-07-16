@@ -84,7 +84,8 @@ function App() {
 }`;
 
   const dynamicImportCode = `// LazyComponent.js is in a separate bundle
-const LazyComponent = React.lazy(() => import('./LazyComponent'));
+const LazyComponent = React.lazy(() => 
+  import('./LazyComponent'));
 
 function App() {
   return (
@@ -108,7 +109,7 @@ module.exports = {
 
   const sectionStyles = {
     padding: `${theme.spacing["4xl"]} 0`,
-    maxWidth: "1400px",
+    maxWidth: "1200px",
     margin: "0 auto",
     paddingLeft: theme.spacing.xl,
     paddingRight: theme.spacing.xl,
@@ -138,7 +139,6 @@ module.exports = {
   const conceptSectionStyles = {
     marginBottom: theme.spacing["4xl"],
     paddingBottom: theme.spacing["3xl"],
-    borderBottom: `1px solid ${theme.colors.border.light}`,
   };
 
   const conceptHeaderStyles = {
