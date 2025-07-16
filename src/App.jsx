@@ -52,7 +52,6 @@ function App() {
   return (
     <div style={{ position: "relative" }}>
       <div style={appContainerStyles}>
-        <Header />
         <Hero />
         <main style={mainContentStyles}>
           {/* All sections are now children of main and will flow correctly */}
@@ -88,7 +87,6 @@ function App() {
             <AdvancedReact />
           </AnimatedSection>
         </main>
-        <Footer />
       </div>
     </div>
   );

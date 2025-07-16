@@ -39,9 +39,9 @@ export const theme = {
     "3xl": "64px",
   },
   borderRadius: {
-    md: "12px",
-    lg: "20px",
-    xl: "24px",
+    md: "16px", // Increased for a softer look
+    lg: "24px", // Increased for a softer look
+    xl: "32px", // Increased for a softer look
     full: "9999px",
   },
   typography: {
@@ -66,5 +66,6 @@ export const theme = {
     lg: "0 10px 30px rgba(26, 26, 26, 0.1)",
     xl: "0 20px 50px rgba(26, 26, 26, 0.12)",
     focus: "0 0 0 3px rgba(232, 80, 2, 0.2)",
+    glass: "0 8px 32px 0 rgba(0, 0, 0, 0.1)", // New shadow for glass effect
   },
 };

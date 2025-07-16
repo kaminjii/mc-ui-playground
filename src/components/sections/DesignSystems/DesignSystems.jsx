@@ -14,6 +14,7 @@ const DesignSystems = () => {
     backgroundColor: theme.colors.background.dark,
     color: theme.colors.text.inverse,
     position: "relative",
+    overflow: "hidden", // Hide overflow from shapes
   };
 
   // This new container wraps all the content. It's centered with 'margin: 0 auto'
@@ -22,6 +23,7 @@ const DesignSystems = () => {
     maxWidth: `calc(${theme.grid.container} - (${theme.grid.margins} * 2))`,
     margin: "auto",
     zIndex: 2,
+    position: "relative",
     display: "flex",
     flexDirection: "column",
     gap: theme.spacing["3xl"],
@@ -101,7 +103,7 @@ const DesignSystems = () => {
         width: size,
         height: size,
         borderRadius: "50%",
-        background: `radial-gradient(circle, ${color}1A 0%, transparent 70%)`,
+        background: `radial-gradient(circle, ${color}33 0%, transparent 70%)`, // Softer gradient
         top,
         left,
         right,
@@ -117,15 +119,15 @@ const DesignSystems = () => {
   return (
     <section style={sectionStyles}>
       <BackgroundShape
-        size="50vw"
-        top="10%"
-        left="-20%"
+        size="60vw"
+        top="-10%"
+        left="-25%"
         color={theme.colors.primary}
       />
       <BackgroundShape
-        size="40vw"
-        top="40%"
-        right="-15%"
+        size="50vw"
+        top="30%"
+        right="-20%"
         color={theme.colors.secondary}
       />
 

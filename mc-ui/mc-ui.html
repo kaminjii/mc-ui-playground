@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UI and Mastercard Developer Guide</title>
+
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/Mastercard/made@main/packages/made-design-tokens/dist/2.2.0/web/themes/b2b/tokens.css">
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/Mastercard/made@main/packages/made-css/dist/2.0.0/made.min.css">
+
+    <style>
+        /* Custom Styles for the Guide */
+        :root {
+            --mc-red: #EB001B;
+            --mc-yellow: #FFC700;
+            --mc-orange: #FF5F00;
+            --mc-dark-grey: #404040;
+            --mc-light-grey: #f0f0f0;
+            --mc-border-grey: #e0e0e0;
+            --font-family-sans-serif: "Mark for MC", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            font-family: var(--font-family-sans-serif);
+            color: var(--mc-dark-grey);
+            line-height: 1.6;
+            margin: 0;
+            background-color: #f9f9f9;
+        }
+
+        /* Header */
+        .main-header {
+            background-color: white;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--mc-border-grey);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .mc-logo {
+            width: 50px;
+            height: 30px;
+            background:
+                radial-gradient(circle at 33% 50%, var(--mc-red) 0 48%, transparent 50%),
+                radial-gradient(circle at 67% 50%, var(--mc-yellow) 0 48%, transparent 50%);
+            background-blend-mode: screen;
+            margin-right: 1rem;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--mc-dark-grey);
+        }
+
+        .main-nav a {
+            color: var(--mc-dark-grey);
+            text-decoration: none;
+            margin-left: 1.5rem;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .main-nav a:hover {
+            color: var(--mc-orange);
+        }
+
+        /* Main Content */
+        main {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        section {
+            background-color: white;
+            border: 1px solid var(--mc-border-grey);
+            border-radius: 8px;
+            margin-bottom: 2.5rem;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            color: var(--mc-dark-grey);
+            font-weight: 500;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            border-bottom: 3px solid var(--mc-orange);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        h2 {
+            font-size: 2rem;
+            color: var(--mc-red);
+            border-bottom: 1px solid var(--mc-border-grey);
+            padding-bottom: 0.5rem;
+            margin-top: 0;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+        }
+
+        h4 {
+            font-size: 1.2rem;
+            color: var(--mc-orange);
+            margin-bottom: 0.5rem;
+        }
+
+        pre {
+            background-color: var(--mc-light-grey);
+            padding: 1rem;
+            border-radius: 4px;
+            border: 1px solid var(--mc-border-grey);
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        code {
+            background-color: #fcece3;
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        blockquote {
+            border-left: 4px solid var(--mc-orange);
+            padding-left: 1rem;
+            margin-left: 0;
+            font-style: italic;
+            color: #666;
+        }
+
+        hr {
+            border: 0;
+            border-top: 1px solid var(--mc-border-grey);
+            margin: 2rem 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        th,
+        td {
+            border: 1px solid var(--mc-border-grey);
+            padding: 0.75rem;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--mc-light-grey);
+            font-weight: bold;
+        }
+
+        /* Interactive Demo Styles */
+        .interactive-demo {
+            border: 2px dashed var(--mc-orange);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 1.5rem;
+        }
+
+        .demo-controls {
+            padding: 1rem;
+            background: var(--mc-light-grey);
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .control-group label {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .control-group select,
+        .control-group input {
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        /* Flexbox Demo */
+        #flex-container {
+            display: flex;
+            min-height: 250px;
+            background: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 10px;
+            position: relative;
+        }
+
+        .flex-item {
+            background: var(--mc-orange);
+            color: white;
+            padding: 1rem;
+            border-radius: 4px;
+            border: 2px solid white;
+            text-align: center;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .flex-item:nth-child(odd) {
+            background-color: var(--mc-red);
+        }
+
+        .flex-item:nth-child(even) {
+            background-color: var(--mc-yellow);
+            color: var(--mc-dark-grey);
+        }
+
+        .axis {
+            position: absolute;
+            font-size: 12px;
+            font-weight: bold;
+            color: black;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+
+        #main-axis {
+            background: rgba(0, 255, 0, 0.7);
+        }
+
+        #cross-axis {
+            background: rgba(0, 0, 255, 0.5);
+            color: white;
+        }
+
+        /* Box Model Demo */
+        #box-model-container {
+            padding: 20px;
+            background-color: #e3f2fd;
+            text-align: center;
+        }
+
+        #margin-box {
+            background-color: #fff9c4;
+            padding: 20px;
+            border: 2px dashed #fdd835;
+        }
+
+        #padding-box {
+            background-color: #c8e6c9;
+            padding: 20px;
+            border: 2px dashed #4caf50;
+        }
+
+        #content-box {
+            background-color: #b3e5fc;
+            padding: 20px 40px;
+            color: black;
+            font-weight: bold;
+        }
+
+        /* PX/EM/REM Demo */
+        #font-demo-container {
+            font-size: 16px;
+            /* Default root font size */
+        }
+
+        #em-parent {
+            font-size: 1.2em;
+            /* 16px * 1.2 = 19.2px */
+            background-color: #eee;
+            padding: 1rem;
+            border: 1px solid #ccc;
+        }
+
+        /* React Sim Demo */
+        .react-sim-container {
+            border: 1px solid #ccc;
+            padding: 1rem;
+            border-radius: 4px;
+        }
+
+        .react-sim-component {
+            border: 1px solid #b3e5fc;
+            background: #e1f5fe;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-radius: 4px;
+        }
+
+        .react-sim-component .react-sim-component {
+            border-color: #ffcdd2;
+            background: #ffebee;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="main-header">
+        <div class="logo-container">
+            <div class="mc-logo"></div>
+            <span class="logo-text">UI Developer Guide</span>
+        </div>
+        <nav class="main-nav">
+            <a href="#react">React</a>
+            <a href="#tooling">Tooling</a>
+            <a href="#css">CSS</a>
+            <a href="#made">MADE</a>
+        </nav>
+    </header>
+
+    <main>
+        <section id="react">
+            <h1>UI and Mastercard</h1>
+            <h2>📜 Evolution of React: Major Eras</h2>
+
+            <article>
+                <h3>🧪 1. The Experimental Era (2013–2014)</h3>
+                <blockquote>"A new way of thinking about UIs"</blockquote>
+                <strong>Key Themes:</strong>
+                <ul>
+                    <li>React open-sourced by Facebook in 2013.</li>
+                    <li>Introduction of JSX, the virtual DOM, and component-based architecture.</li>
+                    <li>Heavy reliance on class components.</li>
+                    <li>Community skepticism toward JSX and "HTML in JavaScript".</li>
+                </ul>
+                <strong>Milestone:</strong> First release of React; early traction in the dev community.
+            </article>
+            <hr>
+            <article>
+                <h3>🏗 2. The Structural Era (2015–2017)</h3>
+                <blockquote>"Organizing large-scale apps"</blockquote>
+                <strong>Key Themes:</strong>
+                <ul>
+                    <li><strong>React Native (2015)</strong> enabled cross-platform mobile development.</li>
+                    <li>Growth of <strong>Redux</strong> for global state management.</li>
+                    <li>Patterns like <strong>higher-order components (HOCs)</strong> and <strong>render props</strong>
+                        became common.</li>
+                    <li>Tooling improved with <strong>Create React App (CRA)</strong> for scaffolding apps.</li>
+                </ul>
+                <strong>Milestone:</strong> React adopted widely in production and mobile development.
+            </article>
+            <hr>
+            <article>
+                <h3>⚙️ 3. The Hooks Era (2018–2020)</h3>
+                <blockquote>"Goodbye classes, hello functions"</blockquote>
+                <strong>Key Themes:</strong>
+                <ul>
+                    <li>React 16.8 (2019) introduced <strong>Hooks</strong> (<code>useState</code>,
+                        <code>useEffect</code>, etc.).</li>
+                    <li>Shift from class to <strong>function components</strong>.</li>
+                    <li>Simpler and more concise code structure.</li>
+                    <li>State and side effects managed in a unified way.</li>
+                </ul>
+                <strong>Milestone:</strong> Functional components became the norm; Hooks adoption soared.
+            </article>
+            <hr>
+            <article>
+                <h3>🚀 4. The Concurrent Era (2020–2022)</h3>
+                <blockquote>"Performance, scheduling, and async rendering"</blockquote>
+                <strong>Key Themes:</strong>
+                <ul>
+                    <li>Introduction of <strong>Concurrent Mode</strong> and <strong>Suspense</strong> (experimental).
+                    </li>
+                    <li>Growth of <strong>React Query</strong>, <strong>SWR</strong>, and <strong>Recoil</strong> for
+                        state/data fetching.</li>
+                    <li>Focus on performance: <strong>lazy loading</strong>, <strong>code-splitting</strong>, and
+                        streaming.</li>
+                    <li>Meta-frameworks like <strong>Next.js</strong> and <strong>Remix</strong> rose in popularity.
+                    </li>
+                </ul>
+                <strong>Milestone:</strong> React evolved to support large-scale, performant, async apps.
+            </article>
+            <hr>
+            <article>
+                <h3>🌐 5. The Full-Stack & Server Components Era (2023–Now)</h3>
+                <blockquote>"React is more than a client-side view library"</blockquote>
+                <strong>Key Themes:</strong>
+                <ul>
+                    <li><strong>React 19</strong> (2024) shipped <strong>Server Components (RSC)</strong>.</li>
+                    <li>Deep integration with <strong>Next.js App Router</strong> for full-stack rendering.</li>
+                    <li>Continued shift toward <strong>hybrid server/client components</strong>.</li>
+                    <li>State management leans on <strong>context</strong>, <strong>React Query</strong>, and
+                        <strong>server-side caching</strong>.</li>
+                    <li>Early versions of <strong>React Compiler</strong> (previously React Forget) were released as
+                        experimental.</li>
+                </ul>
+                <strong>Milestone:</strong> React matures as a full-stack framework with server-first capabilities.
+            </article>
+            <hr>
+            <article>
+                <h3>🔮 (Emerging) 6. The Compiler-Optimized Era (Coming Soon)</h3>
+                <blockquote>"Let the compiler handle the hard parts"</blockquote>
+                <strong>What's Coming:</strong>
+                <ul>
+                    <li><strong>React Compiler</strong> to automatically memoize code, optimizing hook usage and
+                        reducing boilerplate.</li>
+                    <li>This compiler aims to eliminate the need for manual performance hooks like `useMemo` and
+                        `useCallback`.</li>
+                    <li>Tighter integration with <strong>modern bundlers</strong> like <strong>Turbopack</strong>,
+                        <strong>Vite</strong>, and <strong>Bun</strong>.</li>
+                    <li>Focus on <strong>zero-config</strong>, faster build times, and leaner apps.</li>
+                </ul>
+                <strong>Milestone:</strong> React continues to abstract away manual performance tuning.
+            </article>
+        </section>
+
+        <section id="react-demos">
+            <h2>React Concepts & Demos</h2>
+
+            <article>
+                <h3>Prop Drilling vs. Context API</h3>
+                <p><strong>Prop Drilling</strong> is the process of passing data from a parent component down through
+                    multiple layers of nested child components to reach a deeply nested one that needs it. This can
+                    become cumbersome.</p>
+                <p>The <strong>Context API</strong> provides a way to share values like these between components without
+                    having to explicitly pass a prop through every level of the tree.</p>
+
+                <div class="interactive-demo">
+                    <h4>Interactive Demo: State Management</h4>
+                    <p>Change the theme color using both methods to see the difference. "Prop Drilling" passes the color
+                        through the intermediate component, while "Context" provides it directly.</p>
+                    <div class="demo-controls" style="grid-template-columns: 1fr 1fr;">
+                        <div class="control-group">
+                            <label for="themeColor">Set Theme Color:</label>
+                            <input type="color" id="themeColor" value="#FF5F00">
+                        </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="react-sim-container">
+                            <strong>Prop Drilling Example</strong>
+                            <div id="prop-parent" class="react-sim-component" style="text-align: center;">
+                                Parent
+                                <div id="prop-intermediate" class="react-sim-component">
+                                    Intermediate (Color is passed through me)
+                                    <div id="prop-child" class="react-sim-component" style="font-weight: bold;">
+                                        Child (I receive the color!)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="react-sim-container">
+                            <strong>Context API Example</strong>
+                            <div id="context-parent" class="react-sim-component" style="text-align: center;">
+                                Parent (I am the 'Provider')
+                                <div class="react-sim-component">
+                                    Intermediate (I don't need to know the color)
+                                    <div id="context-child" class="react-sim-component" style="font-weight: bold;">
+                                        Child (I 'consume' the color directly!)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            <hr>
+            <article>
+                <h3>Avoiding Unnecessary Renders</h3>
+                <p>React components re-render when their state or props change. Sometimes, a component re-renders even
+                    if its output will be the same, which is inefficient. We can prevent this using techniques like
+                    <code>React.memo</code> for components, and <code>useCallback</code>/<code>useMemo</code> for
+                    functions and values.</p>
+
+                <div class="interactive-demo">
+                    <h4>Demo: Memoization Simulation</h4>
+                    <p>Click the buttons below. Notice how the "Unoptimized Component" re-renders every time the
+                        parent's count changes. The "Optimized Component" only re-renders when its own specific data
+                        changes, ignoring parent re-renders.</p>
+                    <div class="demo-controls" style="grid-template-columns: 1fr 1fr;">
+                        <button id="rerenderParentBtn" class="made-c-primary-button">Update Parent State</button>
+                        <button id="rerenderOptimizedBtn" class="made-c-secondary-button">Update Optimized Child's
+                            Prop</button>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="react-sim-component">
+                            <strong>Parent Component</strong>
+                            <p>Parent Render Count: <span id="parentRenderCount">0</span></p>
+                            <p>Optimized Child Prop Value: <span id="optimizedPropValue">A</span></p>
+                        </div>
+                        <div class="react-sim-component">
+                            <strong>Child Components</strong>
+                            <p>Unoptimized Child Render Count: <span id="unoptimizedRenderCount">0</span></p>
+                            <p>Optimized (Memoized) Child Render Count: <span id="optimizedRenderCount">0</span></p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            <hr>
+            <article>
+                <h3>Lazy Loading and Caching</h3>
+                <p><strong>Lazy Loading</strong> (or code-splitting) is the practice of splitting your app's code into
+                    smaller chunks which are loaded on demand, rather than loading everything upfront. This improves
+                    initial load time.</p>
+                <p><strong>Caching</strong> involves storing data that has been fetched so it doesn't need to be fetched
+                    again. Libraries like React Query excel at this, managing cache invalidation, background updates,
+                    and more.</p>
+                <div class="interactive-demo">
+                    <h4>Demo: Lazy Load & Cache Simulation</h4>
+                    <p>Click the button to "load" a component. The first click simulates a network request with a delay.
+                        Subsequent clicks will be instant, simulating a cached response.</p>
+                    <div class="demo-controls" style="grid-template-columns: 1fr;">
+                        <button id="lazyLoadBtn" class="made-c-primary-button">Load User Profile Component</button>
+                    </div>
+                    <div id="lazy-load-content" class="react-sim-component" style="min-height: 50px;">
+                        Click the button to load content here.
+                    </div>
+                </div>
+            </article>
+
+        </section>
+
+        <section id="tooling">
+            <h2>Developer Tooling</h2>
+            <article>
+                <h3>Yarn vs NPM vs PNPM</h3>
+                <p>These are all package managers for JavaScript, used to install, manage, and share code packages
+                    (dependencies) for your projects. While they serve the same core purpose, they have key differences
+                    in performance, disk space usage, and dependency management.</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>NPM (Node Package Manager)</th>
+                            <th>Yarn</th>
+                            <th>PNPM (Performant NPM)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>History</strong></td>
+                            <td>The default for Node.js, bundled since 2010.</td>
+                            <td>Created by Facebook in 2016 to address NPM's early performance and security issues.</td>
+                            <td>Created in 2017, focusing on speed and disk space efficiency.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Dependency Structure</strong></td>
+                            <td>Uses a nested and then flattened <code>node_modules</code> structure. Can lead to
+                                duplication.</td>
+                            <td>Similar to NPM, uses a flattened structure.</td>
+                            <td>Uses a content-addressable storage and symlinks. Avoids duplication, saving significant
+                                disk space.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Performance</strong></td>
+                            <td>Has improved significantly, but can be slower than alternatives for large projects.</td>
+                            <td>Historically faster than NPM, especially with caching and parallel installs.</td>
+                            <td>Generally the fastest, especially on subsequent installs due to its efficient storage
+                                model.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Lock File</strong></td>
+                            <td><code>package-lock.json</code></td>
+                            <td><code>yarn.lock</code></td>
+                            <td><code>pnpm-lock.yaml</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </article>
+            <hr>
+            <article>
+                <h3>Vite vs Create React App (CRA) vs Next.js</h3>
+                <p>These are tools to build React applications, but they serve different purposes.</p>
+                <ul>
+                    <li><strong>Create React App (CRA):</strong> Was the official scaffolding tool for React. It
+                        provided a zero-config setup for building client-side SPAs. It was sunsetted in 2023 because it
+                        became slow and inflexible compared to modern alternatives. Its use of Webpack for bundling and
+                        Jest for testing was powerful but often sluggish for development.</li>
+                    <li><strong>Vite:</strong> A modern build tool that focuses on speed. It uses the browser's native
+                        ES modules during development for instant server start and lightning-fast Hot Module Replacement
+                        (HMR). For production builds, it uses Rollup, which is highly optimized. Vite is a fantastic
+                        replacement for CRA for building SPAs.</li>
+                    <li><strong>Next.js:</strong> A full-stack React framework. It goes beyond a build tool, offering
+                        file-based routing, server-side rendering (SSR), static site generation (SSG), and API routes
+                        out of the box. It's ideal for complex applications, SEO-critical sites, and when you need both
+                        a frontend and backend in one project.</li>
+                </ul>
+
+                <h4>Issue: Vitest vs. Jest with Static Font Files</h4>
+                <p>A common issue, like the one with <code>@connect/typography</code> using a <code>.woff2</code> font
+                    file, highlights a key difference between test runners.</p>
+                <ul>
+                    <li><strong>Why Jest handles it:</strong> Jest, commonly used with CRA, runs in a Node.js
+                        environment, not a real browser. It uses "transforms" to process non-JavaScript files. A default
+                        CRA setup includes a transform that replaces file imports (like fonts, CSS, images) with a mock
+                        string or object. So, Jest never actually tries to *load* the font file.</li>
+                    <li><strong>Why Vitest has issues:</strong> Vitest, built on Vite, has a different architecture. It
+                        can run tests in a Node environment or a browser-like environment (via `jsdom` or `happy-dom`).
+                        When it encounters a direct import of a static asset like a `.woff2` file within a component, it
+                        might try to resolve and process that file. If not configured correctly, this can fail, as the
+                        test environment doesn't know what to do with a binary font file.</li>
+                </ul>
+                <h4>Solution: Mocking in Vitest</h4>
+                <p>The standard solution is to mock the problematic module. You tell Vitest: "whenever you see an import
+                    from `@connect/typography`, don't actually load it. Instead, use this fake object I'm providing."
+                    This isolates the test from the implementation detail of the font file.</p>
+                <pre><code>// In your test setup file or at the top of a test file
+import { vi } from 'vitest';
+
+// Mock the entire package
+vi.mock('@connect/typography', () => {
+  // Return a mock object. Here, we mock the 'Typography' component
+  // as a simple div. This prevents the test from breaking.
+  return {
+    Typography: (props) => &lt;div&gt;{props.children}&lt;/div&gt;,
+    // You can add other named exports as needed
+  };
+});</code></pre>
+            </article>
+            <hr>
+            <article>
+                <h3>SPA vs MPA</h3>
+                <p><strong>Single-Page Applications (SPAs)</strong> load a single HTML page and dynamically update
+                    content as the user interacts with the app. Navigation is handled by JavaScript. (e.g., Gmail,
+                    Facebook).</p>
+                <p><strong>Multi-Page Applications (MPAs)</strong> are the traditional web model where clicking a link
+                    requests a completely new page from the server. (e.g., Amazon, Wikipedia).</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Aspect</th>
+                            <th>SPA (e.g., React, Vue)</th>
+                            <th>MPA (e.g., traditional server-rendered sites)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>User Experience</strong></td>
+                            <td>Faster, fluid, app-like feel after initial load. No page reloads.</td>
+                            <td>Slower transitions between pages due to full page reloads.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Initial Load</strong></td>
+                            <td>Can be slow as the entire framework and app code needs to be loaded.</td>
+                            <td>Faster initial load for a single page.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>SEO</strong></td>
+                            <td>Can be challenging as search engine crawlers may not execute JavaScript correctly.
+                                Requires solutions like SSR.</td>
+                            <td>Excellent for SEO as each page is distinct and easily crawlable.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Development</strong></td>
+                            <td>Complex state management. Clear separation between frontend and backend (API).</td>
+                            <td>Simpler state management (per page). Tightly coupled frontend and backend.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </article>
+        </section>
+
+        <section id="css">
+            <h2>Major UI CSS Concepts</h2>
+
+            <article>
+                <h3>Flexbox</h3>
+                <p>Flexbox is a one-dimensional layout model that offers an efficient way to lay out, align, and
+                    distribute space among items in a container, even when their size is unknown or dynamic.</p>
+                <ul>
+                    <li><strong>Main Axis & Cross Axis:</strong> The primary concept. If `flex-direction` is `row`
+                        (default), the main axis is horizontal and the cross axis is vertical. If `column`, they are
+                        switched.</li>
+                    <li><strong>Container Properties:</strong>
+                        <ul>
+                            <li><code>display: flex;</code>: Defines a flex container.</li>
+                            <li><code>justify-content</code>: Aligns items along the **main axis**.</li>
+                            <li><code>align-items</code>: Aligns items along the **cross axis**.</li>
+                            <li><code>flex-wrap</code>: Allows items to wrap onto multiple lines.</li>
+                            <li><code>gap</code>: Defines the space between flex items.</li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <div class="interactive-demo">
+                    <h4>Interactive Flexbox Demo</h4>
+                    <p>Adjust the container's properties and see how the items react. The axes will update based on the
+                        `flex-direction`.</p>
+                    <div class="demo-controls">
+                        <div class="control-group">
+                            <label for="flex-item-count">Number of Items</label>
+                            <input type="range" id="flex-item-count" min="1" max="10" value="5">
+                        </div>
+                        <div class="control-group">
+                            <label for="flex-direction">flex-direction</label>
+                            <select id="flex-direction">
+                                <option value="row">row</option>
+                                <option value="column">column</option>
+                                <option value="row-reverse">row-reverse</option>
+                                <option value="column-reverse">column-reverse</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label for="justify-content">justify-content</label>
+                            <select id="justify-content">
+                                <option value="flex-start">flex-start</option>
+                                <option value="flex-end">flex-end</option>
+                                <option value="center">center</option>
+                                <option value="space-between">space-between</option>
+                                <option value="space-around">space-around</option>
+                                <option value="space-evenly">space-evenly</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label for="align-items">align-items</label>
+                            <select id="align-items">
+                                <option value="stretch">stretch</option>
+                                <option value="flex-start">flex-start</option>
+                                <option value="flex-end">flex-end</option>
+                                <option value="center">center</option>
+                                <option value="baseline">baseline</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label for="flex-wrap">flex-wrap</label>
+                            <select id="flex-wrap">
+                                <option value="nowrap">nowrap</option>
+                                <option value="wrap">wrap</option>
+                                <option value="wrap-reverse">wrap-reverse</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label for="flex-gap">gap (px)</label>
+                            <input type="range" id="flex-gap" min="0" max="50" value="10">
+                        </div>
+                    </div>
+                    <div id="flex-container">
+                        <div id="main-axis" class="axis">Main Axis</div>
+                        <div id="cross-axis" class="axis">Cross Axis</div>
+                    </div>
+                </div>
+            </article>
+            <hr>
+            <article>
+                <h3>Spacing: Padding vs. Margin vs. Gap</h3>
+                <p>These three properties define space in CSS, but in different ways.</p>
+                <ul>
+                    <li><strong>Margin:</strong> Space *outside* an element's border. It pushes other elements away.
+                    </li>
+                    <li><strong>Padding:</strong> Space *inside* an element's border, between the border and the
+                        content.</li>
+                    <li><strong>Gap:</strong> A property for Flexbox and Grid containers to define the space *between*
+                        child elements, simplifying spacing without using margins.</li>
+                </ul>
+
+                <div class="interactive-demo">
+                    <h4>Interactive Box Model Demo</h4>
+                    <p>Adjust the sliders to see how margin and padding affect the element's space, similar to browser
+                        dev tools.</p>
+                    <div class="demo-controls">
+                        <div class="control-group">
+                            <label for="margin-slider">Margin (px)</label>
+                            <input type="range" id="margin-slider" min="0" max="50" value="20">
+                        </div>
+                        <div class="control-group">
+                            <label for="padding-slider">Padding (px)</label>
+                            <input type="range" id="padding-slider" min="0" max="50" value="20">
+                        </div>
+                    </div>
+                    <div id="box-model-container">
+                        <div id="margin-box">
+                            <div style="text-align: left; font-size: 12px; color: #757575;">Margin: <span
+                                    id="margin-value">20px</span></div>
+                            <div id="padding-box">
+                                <div style="text-align: left; font-size: 12px; color: #2e7d32;">Padding: <span
+                                        id="padding-value">20px</span></div>
+                                <div id="content-box">Content</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </article>
+            <hr>
+            <article>
+                <h3>Units: em vs px vs rem</h3>
+                <p>Choosing the right CSS unit is crucial for creating scalable and maintainable designs.</p>
+                <ul>
+                    <li><strong>px (Pixel):</strong> An absolute unit. 1px is one pixel on the screen. It's fixed and
+                        not scalable, which can be bad for accessibility. Good for things that should never change size,
+                        like border widths.</li>
+                    <li><strong>em:</strong> A relative unit. It's relative to the `font-size` of its direct parent
+                        element. If a parent's font-size is 16px, `1.5em` is 24px. This can lead to compounding effects
+                        in nested elements.</li>
+                    <li><strong>rem (Root em):</strong> A relative unit. It's relative to the `font-size` of the root
+                        element (the `<html>` tag). This avoids the compounding issue of `em` and is excellent for
+                        creating scalable layouts. Changing the root font size scales the entire application
+                        proportionally. This is the preferred unit for font sizes and spacing in modern web design.</li>
+                </ul>
+                <div class="interactive-demo">
+                    <h4>Interactive Unit Demo</h4>
+                    <p>Change the base font size of the page (the `rem` unit's reference) and see how it affects `rem`
+                        and `em` based elements differently. The `px` element remains fixed.</p>
+                    <div class="demo-controls">
+                        <div class="control-group">
+                            <label for="base-font-slider">Base Font Size (px)</label>
+                            <input type="range" id="base-font-slider" min="10" max="24" value="16">
+                        </div>
+                    </div>
+                    <div id="font-demo-container">
+                        <p>Current Base (Root) Font Size: <span id="base-font-value">16px</span></p>
+                        <div style="font-size: 16px; border: 1px solid #ccc; padding: 0.5rem; margin-bottom: 0.5rem;">
+                            This text is <strong>16px</strong>. It will not change.</div>
+                        <div style="font-size: 1rem; border: 1px solid #ccc; padding: 0.5rem; margin-bottom: 0.5rem;">
+                            This text is <strong>1rem</strong>. It scales with the base font size.</div>
+                        <div id="em-parent" style="border: 1px solid #ccc; padding: 0.5rem;">
+                            This parent's font-size is 1.2em.
+                            <div style="font-size: 1.2em; border: 1px solid #aaa; padding: 0.5rem; margin-top: 0.5rem;">
+                                This child's font-size is also 1.2em (compounded).</div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </section>
+
+        <section id="made">
+            <h2>SVG vs IMG</h2>
+            <article>
+                <p>Choosing between `<img>` and `<svg>` tags depends on the type of graphic you're displaying.</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Aspect</th>
+                            <th><code>&lt;img&gt;</code></th>
+                            <th><code>&lt;svg&gt;</code></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Image Type</strong></td>
+                            <td>Raster images (JPG, PNG, GIF). Pixel-based.</td>
+                            <td>Vector images (SVG). Math-based paths.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Best For</strong></td>
+                            <td>Complex, detailed images like photographs.</td>
+                            <td>Logos, icons, and simple illustrations that need to scale.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Scalability</strong></td>
+                            <td>Loses quality (pixelates) when scaled up.</td>
+                            <td>Scales infinitely without any loss of quality.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Manipulation</strong></td>
+                            <td>Cannot be styled with CSS. Limited interaction.</td>
+                            <td>Can be styled and manipulated with CSS and JavaScript (e.g., changing color on hover).
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Accessibility</strong></td>
+                            <td>Relies on the `alt` attribute.</td>
+                            <td>Can have embedded `&lt;title&gt;` and `&lt;desc&gt;` tags for screen readers, making it
+                                highly accessible.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h4>Mastercard MADE Icon Workflow</h4>
+                <p>In the Mastercard MADE Storybook, the recommended way to use icons is to inline the SVG, which
+                    provides maximum control and performance.</p>
+                <ol>
+                    <li>Navigate to the icon library in the MADE Storybook.</li>
+                    <li>Find your desired icon and click the "download" or "copy" action. This will often open the raw
+                        SVG file or copy the code to your clipboard.</li>
+                    <li>Inspect the SVG code and copy the `<svg>` element and its contents.</li>
+                    <li>Paste it directly into your HTML or JSX.</li>
+                    <li><strong>For accessibility, add a `<title>` tag inside the SVG.</strong> This acts like an `alt`
+                        tag for screen readers.</li>
+                </ol>
+                <pre><code>&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"&gt;
+  &lt;!-- This title makes the icon accessible! --&gt;
+  &lt;title&gt;A descriptive title like "Close button"&lt;/title&gt;
+  &lt;path d="..." /&gt;
+&lt;/svg&gt;</code></pre>
+            </article>
+            <hr>
+            <h2>Mastercard MADE</h2>
+            <article>
+                <p><strong>MADE</strong> stands for <strong>Mastercard Adaptive Design Ecosystem</strong>. It is a
+                    comprehensive system that provides design guidelines, reusable UI components, and development tools
+                    to ensure consistency and speed across Mastercard's digital products.</p>
+
+                <h4>Design Tokens & Utility Classes</h4>
+                <p>MADE provides a set of design tokens (for colors, spacing, typography) that are exposed as CSS
+                    variables and utility classes. Utility classes, prefixed with <code>made-u-</code>, apply a single
+                    CSS rule.</p>
+                <p>Common examples include <code>made-u-display-flex</code> or <code>made-u-padding-4-x</code>. These
+                    are added to the <code>className</code> attribute of an element, not a <code>style</code> prop.</p>
+                <pre><code>&lt;!-- Correct usage of utility classes in className --&gt;
+&lt;div className="made-u-display-flex made-u-justify-content-center"&gt;
+  ...
+&lt;/div&gt;</code></pre>
+
+                <h4>Component Classes</h4>
+                <p>Component classes, prefixed with <code>made-c-</code>, are more powerful. They bundle multiple
+                    styles, including pseudo-states like <code>:hover</code> and <code>:focus</code>, to create a
+                    complete component style.</p>
+                <p>For example, <code>made-c-primary-button</code> styles a button with the primary orange theme. A key
+                    convention is the layering required for variants like dark mode. To apply a dark theme, you must use
+                    <strong>both</strong> the base class and the variant class.</p>
+                <pre><code>&lt;!-- You need BOTH classes for the dark variant --&gt;
+&lt;button className="made-c-primary-button made-c-primary-button-on-dark"&gt;
+  Dark Button
+&lt;/button&gt;
+
+&lt;!-- Using the variant class by itself will NOT work --&gt;
+&lt;button className="made-c-primary-button-on-dark"&gt;
+  Broken Button
+&lt;/button&gt;</code></pre>
+                <p>A common criticism of this approach is that it can lead to very long and verbose
+                    <code>className</code> strings.</p>
+
+                <h4>Connect UI Kit</h4>
+                <p>The Connect UI Kit is a React component library built on top of MADE. It offers fully functional and
+                    styled components like buttons, modals, and toasts that developers can import and use directly.</p>
+                <ul>
+                    <li><strong>Benefit:</strong> Saves significant development time, enforces design consistency, and
+                        ensures products are up-to-date with Mastercard's latest standards.</li>
+                    <li><strong>Limitation:</strong> Components are not always fully customizable. They can have
+                        hard-coded restrictions that are difficult to override. For example, the
+                        <code>@connect/toast</code> component may limit toast messages to a maximum of two lines, and
+                        this cannot be changed by the consuming application.</li>
+                </ul>
+
+                <h4>Resources</h4>
+                <p>Designers and developers have access to a rich set of resources:</p>
+                <ul>
+                    <li><strong>Figma Libraries:</strong> For designers to create mockups that align with MADE.</li>
+                    <li><strong>Storybook:</strong> For developers to view, test, and get code snippets for all
+                        available components and classes. [Link to Storybook would go here]</li>
+                </ul>
+
+                <h4>How to Contribute</h4>
+                <p>Contributing to a shared library like the Connect UI Kit follows a structured process:</p>
+                <ol>
+                    <li><strong>Create an Aha! Ticket:</strong> All work must be formally proposed and tracked.</li>
+                    <li><strong>Get Prioritized:</strong> The ticket must be approved and prioritized by the product
+                        owners.</li>
+                    <li><strong>Follow the PR Process:</strong>
+                        <ul>
+                            <li>Fork the repository (e.g., `connect-ui-kit`).</li>
+                            <li>Create a new branch and make your changes.</li>
+                            <li>Run all tests. It's crucial to use the provided scripts, like
+                                <code>npm run cypress:pipeline</code>, and remove any local Cypress installations to
+                                avoid conflicts.</li>
+                            <li>Update the package version (following semantic versioning) and write a clear entry in
+                                the <code>CHANGELOG.md</code>.</li>
+                            <li>If your change affects other packages in the monorepo, you must also upgrade their
+                                dependency versions to point to your new version.</li>
+                        </ul>
+                    </li>
+                </ol>
+                <p>A common challenge is that Mastercard's repository permissions often prevent outside commits into a
+                    forked branch, making it difficult for others to help resolve merge conflicts directly.</p>
+            </article>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // --- React Sim Demos ---
+            const themeColorInput = document.getElementById('themeColor');
+            const propChild = document.getElementById('prop-child');
+            const contextChild = document.getElementById('context-child');
+
+            themeColorInput.addEventListener('input', (e) => {
+                propChild.style.backgroundColor = e.target.value;
+                contextChild.style.backgroundColor = e.target.value;
+            });
+            propChild.style.backgroundColor = themeColorInput.value;
+            contextChild.style.backgroundColor = themeColorInput.value;
+
+            // Memoization Sim
+            const rerenderParentBtn = document.getElementById('rerenderParentBtn');
+            const rerenderOptimizedBtn = document.getElementById('rerenderOptimizedBtn');
+            const parentRenderCount = document.getElementById('parentRenderCount');
+            const unoptimizedRenderCount = document.getElementById('unoptimizedRenderCount');
+            const optimizedRenderCount = document.getElementById('optimizedRenderCount');
+            const optimizedPropValue = document.getElementById('optimizedPropValue');
+
+            let pCount = 0, uCount = 0, oCount = 0;
+            let propVal = 'A';
+
+            rerenderParentBtn.addEventListener('click', () => {
+                pCount++;
+                uCount++; // Unoptimized always re-renders with parent
+                parentRenderCount.textContent = pCount;
+                unoptimizedRenderCount.textContent = uCount;
+            });
+            rerenderOptimizedBtn.addEventListener('click', () => {
+                pCount++;
+                uCount++;
+                oCount++; // Optimized only re-renders when its prop changes
+                propVal = propVal === 'A' ? 'B' : 'A';
+
+                parentRenderCount.textContent = pCount;
+                unoptimizedRenderCount.textContent = uCount;
+                optimizedRenderCount.textContent = oCount;
+                optimizedPropValue.textContent = propVal;
+            });
+
+            // Lazy Load Sim
+            const lazyLoadBtn = document.getElementById('lazyLoadBtn');
+            const lazyLoadContent = document.getElementById('lazy-load-content');
+            let isLoaded = false;
+
+            lazyLoadBtn.addEventListener('click', () => {
+                lazyLoadContent.innerHTML = '<em>Loading...</em>';
+                if (isLoaded) {
+                    lazyLoadContent.innerHTML = '<strong>User Profile (from cache):</strong><p>Name: John Doe<br>Status: Active</p>';
+                    return;
+                }
+                setTimeout(() => {
+                    lazyLoadContent.innerHTML = '<strong>User Profile (loaded):</strong><p>Name: John Doe<br>Status: Active</p>';
+                    isLoaded = true;
+                }, 1000);
+            });
+
+
+            // --- Flexbox Demo ---
+            const flexContainer = document.getElementById('flex-container');
+            const controls = {
+                direction: document.getElementById('flex-direction'),
+                justify: document.getElementById('justify-content'),
+                align: document.getElementById('align-items'),
+                wrap: document.getElementById('flex-wrap'),
+                gap: document.getElementById('flex-gap'),
+                count: document.getElementById('flex-item-count')
+            };
+
+            const itemDimensions = [
+                { w: '80px', h: '60px' }, { w: '120px', h: '80px' }, { w: '100px', h: '100px' },
+                { w: '90px', h: '70px' }, { w: '150px', h: '50px' }, { w: '70px', h: '90px' },
+                { w: '110px', h: '110px' }, { w: '80px', h: '100px' }, { w: '130px', h: '60px' }, { w: '100px', h: '80px' }
+            ];
+
+            const updateFlexbox = () => {
+                flexContainer.style.flexDirection = controls.direction.value;
+                flexContainer.style.justifyContent = controls.justify.value;
+                flexContainer.style.alignItems = controls.align.value;
+                flexContainer.style.flexWrap = controls.wrap.value;
+                flexContainer.style.gap = `${controls.gap.value}px`;
+
+                // Update axis labels
+                const mainAxis = document.getElementById('main-axis');
+                const crossAxis = document.getElementById('cross-axis');
+                if (controls.direction.value.includes('row')) {
+                    mainAxis.style.cssText = 'top: -20px; left: 5px;';
+                    crossAxis.style.cssText = 'top: 5px; left: -85px; transform: rotate(0deg);';
+                } else {
+                    mainAxis.style.cssText = 'top: 5px; left: -85px;';
+                    crossAxis.style.cssText = 'top: -20px; left: 5px; transform: rotate(0deg);';
+                }
+            };
+
+            const generateFlexItems = () => {
+                const count = parseInt(controls.count.value, 10);
+                // Clear all but axis labels
+                flexContainer.innerHTML = '<div id="main-axis" class="axis">Main Axis</div><div id="cross-axis" class="axis">Cross Axis</div>';
+
+                for (let i = 0; i < count; i++) {
+                    const item = document.createElement('div');
+                    item.className = 'flex-item';
+                    item.textContent = i + 1;
+                    item.style.width = itemDimensions[i].w;
+                    item.style.height = itemDimensions[i].h;
+                    flexContainer.appendChild(item);
+                }
+                updateFlexbox();
+            }
+
+            Object.values(controls).forEach(control => control.addEventListener('input', updateFlexbox));
+            controls.count.addEventListener('input', generateFlexItems);
+            generateFlexItems();
+
+
+            // --- Box Model Demo ---
+            const marginSlider = document.getElementById('margin-slider');
+            const paddingSlider = document.getElementById('padding-slider');
+            const marginBox = document.getElementById('margin-box');
+            const paddingBox = document.getElementById('padding-box');
+            const marginValue = document.getElementById('margin-value');
+            const paddingValue = document.getElementById('padding-value');
+
+            marginSlider.addEventListener('input', (e) => {
+                const value = `${e.target.value}px`;
+                marginBox.style.padding = value;
+                marginValue.textContent = value;
+            });
+            paddingSlider.addEventListener('input', (e) => {
+                const value = `${e.target.value}px`;
+                paddingBox.style.padding = value;
+                paddingValue.textContent = value;
+            });
+
+            // --- PX/EM/REM Demo ---
+            const baseFontSlider = document.getElementById('base-font-slider');
+            const fontDemoContainer = document.getElementById('font-demo-container');
+            const baseFontValue = document.getElementById('base-font-value');
+
+            baseFontSlider.addEventListener('input', (e) => {
+                const value = `${e.target.value}px`;
+                fontDemoContainer.style.fontSize = value;
+                baseFontValue.textContent = value;
+            });
+        });
+    </script>
+</body>
+
+</html>

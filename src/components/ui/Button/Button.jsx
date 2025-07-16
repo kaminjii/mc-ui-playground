@@ -1,108 +1,94 @@
 // src/components/ui/Button/Button.jsx
-import React from 'react';
-import { Loader2 } from 'lucide-react';
-import { theme } from '../../../theme';
+import React from "react";
+import { motion } from "framer-motion";
+import { theme } from "../../../theme";
 
-const Button = ({ 
-  children, 
-  variant = 'primary', 
-  size = 'md', 
-  disabled = false, 
-  loading = false, 
+const Button = ({
+  children,
   onClick,
-  className = '',
+  variant = "primary",
+  size = "md",
+  disabled = false,
   style = {},
-  ...props 
 }) => {
   const baseStyles = {
-    display: 'inline-flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: theme.spacing.sm,
-    fontFamily: theme.typography.fontFamily.primary,
-    fontWeight: theme.typography.fontWeight.medium,
+    fontFamily: theme.typography.fontFamily,
+    fontWeight: theme.typography.fontWeight.bold,
     borderRadius: theme.borderRadius.full,
-    transition: 'all 0.25s ease-out',
-    cursor: disabled || loading ? 'not-allowed' : 'pointer',
-    border: '1px solid transparent',
-    outline: 'none',
+    border: "none",
+    cursor: disabled ? "not-allowed" : "pointer",
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    textDecoration: "none",
+    transition: "all 0.2s ease-in-out",
   };
 
-  const variants = {
+  const sizeStyles = {
+    sm: {
+      padding: `${theme.spacing.sm} ${theme.spacing.md}`,
+      fontSize: theme.typography.fontSize.sm,
+    },
+    md: {
+      padding: `${theme.spacing.md} ${theme.spacing.xl}`,
+      fontSize: theme.typography.fontSize.base,
+    },
+    lg: {
+      padding: `18px ${theme.spacing["2xl"]}`,
+      fontSize: theme.typography.fontSize.lg,
+    },
+  };
+
+  const variantStyles = {
     primary: {
       backgroundColor: theme.colors.primary,
       color: theme.colors.text.inverse,
-      borderColor: theme.colors.primary,
+      boxShadow: theme.shadows.md,
     },
     secondary: {
       backgroundColor: theme.colors.background.primary,
       color: theme.colors.text.primary,
-      borderColor: theme.colors.border.medium,
+      border: `2px solid ${theme.colors.border.medium}`,
     },
-    ghost: {
-      backgroundColor: 'transparent',
-      color: theme.colors.text.secondary,
-      borderColor: 'transparent',
-    }
+    glass: {
+      backgroundColor: "rgba(255, 255, 255, 0.1)",
+      color: theme.colors.text.inverse,
+      backdropFilter: "blur(10px)",
+      border: "1px solid rgba(255, 255, 255, 0.2)",
+      boxShadow: theme.shadows.glass,
+    },
   };
 
-  const sizes = {
-    sm: { padding: `0 ${theme.spacing.lg}`, fontSize: theme.typography.fontSize.sm, height: '36px' },
-    md: { padding: `0 ${theme.spacing.xl}`, fontSize: theme.typography.fontSize.base, height: '44px' },
-    lg: { padding: `0 ${theme.spacing['2xl']}`, fontSize: theme.typography.fontSize.lg, height: '52px' }
+  const hoverStyles = {
+    primary: { scale: 1.05, boxShadow: theme.shadows.lg },
+    secondary: {
+      borderColor: theme.colors.primary,
+      color: theme.colors.primary,
+    },
+    glass: {
+      backgroundColor: "rgba(255, 255, 255, 0.2)",
+      scale: 1.05,
+    },
   };
 
-  const buttonStyles = {
+  const combinedStyles = {
     ...baseStyles,
-    ...variants[variant],
-    ...sizes[size],
+    ...sizeStyles[size],
+    ...variantStyles[variant],
     ...style,
-    opacity: disabled || loading ? 0.7 : 1
+    opacity: disabled ? 0.6 : 1,
   };
 
-  // Define hover styles separately to keep the base object clean
-  const getHoverStyles = () => {
-    switch(variant) {
-      case 'primary':
-        return { transform: 'translateY(-2px)', boxShadow: theme.shadows.lg, filter: 'brightness(1.05)' };
-      case 'secondary':
-        return { borderColor: theme.colors.primary, color: theme.colors.primary, boxShadow: theme.shadows.md };
-      case 'ghost':
-        return { backgroundColor: theme.colors.background.secondary, color: theme.colors.text.primary };
-      default:
-        return {};
-    }
-  };
-  
   return (
-    <button 
-      style={buttonStyles}
+    <motion.button
+      style={combinedStyles}
       onClick={onClick}
-      disabled={disabled || loading}
-      className={className}
-      onMouseEnter={(e) => {
-        if (!disabled && !loading) {
-          Object.assign(e.currentTarget.style, getHoverStyles());
-        }
-      }}
-      onMouseLeave={(e) => {
-        if (!disabled && !loading) {
-          // Reset styles to original state
-          Object.assign(e.currentTarget.style, {
-            transform: 'translateY(0)',
-            boxShadow: 'none',
-            filter: 'none',
-            backgroundColor: variants[variant].backgroundColor,
-            color: variants[variant].color,
-            borderColor: variants[variant].borderColor || 'transparent',
-          });
-        }
-      }}
-      {...props}
+      disabled={disabled}
+      whileHover={!disabled ? hoverStyles[variant] : {}}
+      whileTap={!disabled ? { scale: 0.98 } : {}}
     >
-      {loading && <Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} />}
       {children}
-    </button>
+    </motion.button>
   );
 };
 

@@ -47,9 +47,9 @@ const Header = () => {
     zIndex: 1000,
     transition:
       "background-color 0.3s ease, box-shadow 0.3s ease, backdrop-filter 0.3s ease",
-    backgroundColor: isScrolled ? "rgba(255, 255, 255, 0.7)" : "transparent",
-    backdropFilter: isScrolled ? "blur(10px)" : "none",
-    boxShadow: isScrolled ? `0 2px 10px rgba(0,0,0,0.05)` : "none",
+    backgroundColor: isScrolled ? "rgba(255, 255, 255, 0.6)" : "transparent", // More transparent
+    backdropFilter: isScrolled ? "blur(18px)" : "none", // More blur
+    boxShadow: isScrolled ? theme.shadows.glass : "none", // Glass shadow
     gridColumn: "1 / -1",
   };
 

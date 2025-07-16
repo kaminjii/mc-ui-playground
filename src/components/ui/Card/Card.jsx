@@ -14,7 +14,7 @@ const Card = ({
   const baseStyles = {
     borderRadius: theme.borderRadius.xl,
     padding: theme.spacing.xl,
-    transition: "box-shadow 0.3s ease, border-color 0.3s ease",
+    transition: "all 0.3s ease",
   };
 
   const variants = {
@@ -29,10 +29,10 @@ const Card = ({
       boxShadow: theme.shadows.lg,
     },
     glass: {
-      backgroundColor: "rgba(255, 255, 255, 0.05)",
-      backdropFilter: "blur(15px)",
+      backgroundColor: "rgba(255, 255, 255, 0.08)",
+      backdropFilter: "blur(20px)",
       border: `1px solid ${theme.colors.border.dark}`,
-      boxShadow: "0 8px 32px 0 rgba(0, 0, 0, 0.1)",
+      boxShadow: theme.shadows.glass,
     },
   };
 
@@ -48,7 +48,7 @@ const Card = ({
         boxShadow: theme.shadows.xl,
         borderColor:
           variant === "glass"
-            ? "rgba(255, 255, 255, 0.2)"
+            ? "rgba(255, 255, 255, 0.25)"
             : theme.colors.border.medium,
       }
     : {};
